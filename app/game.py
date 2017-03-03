@@ -15,6 +15,7 @@ class Game:
         self.foods = map(Coord, data['food'])
         self.dead_snakes = map(Snake, data['dead_snakes'])
         self.snakes = map(Snake, data['snakes'])
+        self.snake_coords = utils.flatten((map(lambda s: s.coords, self.snakes)))
         self.other_snakes = filter(lambda s: s.id != self.mid, self.snakes)
         self.me = list(filter(lambda s: s.id == self.mid, self.snakes))[0]
         self.board = self.create_board_matrix()
@@ -24,7 +25,7 @@ class Game:
         if coord.y < 0 or coord.y >= self.height or coord.x < 0 or coord.x >= self.width:
             return False
 
-        return coord not in self.all_but_head_coords()
+        return coord not in self.snake_coords
 
     def is_unsafe(self, coord):
         """Return if a coordinate is not safe."""
@@ -48,8 +49,7 @@ class Game:
             matrix[i][len(matrix[i]) - 1] = 1
 
         # Add walls for other snakes and our tail
-        snake_coords = utils.flatten((map(lambda s: s.coords, self.snakes)))
-        for c in snake_coords:
+        for c in self.snake_coords:
             matrix[c.y][c.x] = 1
 
         self.print_matrix(matrix)
