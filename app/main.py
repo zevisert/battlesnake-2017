@@ -71,7 +71,7 @@ def food(game):
         #   i.e. if food is to the top right, possible moves are up and right
         mt = game.me.moves_to(game.foods[idx])
         for m in mt:
-            # Add possible move to possible moves with inverse distance as
+            # Add possible move to possible moves with inverse distance as goodness
             moves.append(Move(m, 1 / d))
 
     return moves

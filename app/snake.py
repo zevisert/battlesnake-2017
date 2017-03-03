@@ -2,7 +2,7 @@ from coord import Coord, UP, DOWN, LEFT, RIGHT
 
 
 class Snake:
-    """Represents snake."""
+    """Represents a snake."""
 
     def __init__(self, s):
         self.coords = s['coords']
