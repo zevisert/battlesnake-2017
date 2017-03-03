@@ -1,14 +1,17 @@
 import bottle
 import os
+import random
 
 import utils
 from move import Move
+from copy import deepcopy
 from coord import UP, DOWN, LEFT, RIGHT
 from game import Game
 
 
 @bottle.route('/static/<path:path>')
 def static(path):
+    """Static files."""
     return bottle.static_file(path, root='static/')
 
 
@@ -25,8 +28,6 @@ def start():
         bottle.request.urlparts.netloc
     )
 
-    # TODO: Do things with data
-
     return {
         'color': '#00FF00',
         'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
@@ -35,27 +36,8 @@ def start():
     }
 
 
-def walls(game):
-    """Return critical wall moves."""
-    banned_moves = []
-    head = game.me.head()
-    if head.up().y < 0:
-        banned_moves.append(Move(UP, 0))
-
-    if head.down().y >= game.height:
-        banned_moves.append(Move(DOWN, 0))
-
-    if head.left().x < 0:
-        banned_moves.append(Move(LEFT, 0))
-
-    if head.right().x >= game.width:
-        banned_moves.append(Move(RIGHT, 0))
-
-    return banned_moves
-
-
-def other_snakes(game):
-    """Return critical moves into other snakes (including our tail)."""
+def unsafe_moves(game):
+    """Return banned moves to neighbour positions (walls and other snakes)."""
     banned_moves = []
     head = game.me.head()
 
@@ -66,8 +48,9 @@ def other_snakes(game):
         {'d': head.right(), 'm': Move(RIGHT, 0)}
     ]
 
+    # If neighbour move is unsafe, add to banned moves
     for n in neighbours:
-        if n['d'] in game.all_but_head_coords():
+        if game.is_unsafe(n['d']):
             banned_moves.append(n['m'])
 
     return banned_moves
@@ -80,11 +63,16 @@ def food(game):
 
     moves = []
 
+    # Get a list of distances to all foods
     food_distances = map(lambda c: game.me.head().distance(c), game.foods)
+
     for idx, d in enumerate(food_distances):
+        # Find possible moves towards the foods
+        #   i.e. if food is to the top right, possible moves are up and right
         mt = game.me.moves_to(game.foods[idx])
         for m in mt:
-            moves.append(Move(m, game.width * game.height - d))
+            # Add possible move to possible moves with inverse distance as
+            moves.append(Move(m, utils.map_to_one(game.width * game.height - d, 0, game.width * game.height)))
 
     return moves
 
@@ -98,6 +86,8 @@ def choose_best_move(moves):
     """Choose the best move based on goodness."""
     moves.sort()
     moves.reverse()
+    if len(moves) <= 0:
+        return None
     return moves[0]
 
 
@@ -108,30 +98,37 @@ def move():
 
     data = bottle.request.json
 
+    # Create game state
     game = Game(data)
 
-    directions = [Move(UP, 0.5), Move(DOWN, 0.5), Move(LEFT, 0.5), Move(RIGHT, 0.5)]
+    # Possible directions we can move
+    directions = [
+        Move(UP, 0.01),
+        Move(DOWN, 0.01),
+        Move(LEFT, 0.01),
+        Move(RIGHT, 0.01)
+    ]
 
     # Critcal positions
-    ws = walls(game)
-    other = other_snakes(game)
-
-    critcal = utils.flatten([ws, other])
+    not_safe = unsafe_moves(game)
+    critcal = utils.flatten([not_safe])
 
     # Good positions
     food_moves = food(game)
-
     good = utils.flatten([food_moves, directions])
 
     print('\n--- critcal')
-    for c in other:
+    for c in critcal:
         print(str(c))
 
     print('\n--- good')
     for c in good:
         print(str(c))
 
+    # Remove critical moves from good moves
     available = remove_critical(good, critcal)
+
+    # Choose best move based on goodness
     move = choose_best_move(available)
 
     print('\n--- available')
@@ -139,7 +136,13 @@ def move():
         print(str(c))
 
     print('\n--- move')
-    print(move)
+
+    # We lost :(
+    if move is None:
+        move = random.choice(directions)
+        print('No best move')
+    else:
+        print(move)
 
     return {
         'move': move.direction,

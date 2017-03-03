@@ -2,6 +2,8 @@ from coord import Coord, UP, DOWN, LEFT, RIGHT
 
 
 class Snake:
+    """Represents snake."""
+
     def __init__(self, s):
         self.coords = s['coords']
         self.name = s['name']
@@ -16,6 +18,10 @@ class Snake:
     def tail(self):
         """Return all but head of snake."""
         return self.coords[1:]
+
+    def length(self):
+        """Return the length of the snake."""
+        return len(self.coords)
 
     def moves_to(self, destination):
         """Return possible moves towards a destination."""
