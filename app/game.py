@@ -16,5 +16,6 @@ class Game:
         self.me = list(filter(lambda s: s.id == self.mid, self.snakes))[0]
 
     def all_but_head_coords(self):
+        """Return a list of all coords that are not our snakes head."""
         other_coords = utils.flatten(map(lambda s: s.coords, self.other_snakes))
         return other_coords + self.me.tail()
