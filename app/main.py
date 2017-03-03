@@ -72,7 +72,7 @@ def food(game):
         mt = game.me.moves_to(game.foods[idx])
         for m in mt:
             # Add possible move to possible moves with inverse distance as
-            moves.append(Move(m, utils.map_to_one(game.width * game.height - d, 0, game.width * game.height)))
+            moves.append(Move(m, 1 / d))
 
     return moves
 
