@@ -1,3 +1,4 @@
+from coord import UP, DOWN, LEFT, RIGHT
 from move import Move
 
 
