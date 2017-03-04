@@ -29,8 +29,8 @@ def start():
     )
 
     return {
-        'color': '#00FF00',
-        'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
+        'color': '#09A8FA',
+        'taunt': 'ha',
         'head_url': head_url,
         'name': 'dave',
         'head_type': 'safe',
@@ -113,10 +113,10 @@ def attack(game):
     def weighted_value(distance, snake_index):
         other_snake = game.snakes[snake_index]
 
-        if other_snake.length() >= my_size + 1:
+        if other_snake.length() >= my_size:
             return 0
 
-        return 1/distance + (0.05 * (my_size - other_snake.length()))
+        return 1/distance + (0.01 * (my_size - other_snake.length()))
 
     if len(game.snakes) <= 0:
         return moves
