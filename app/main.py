@@ -118,8 +118,11 @@ def attack(game):
         mt = game.me.moves_to(head_coords[idx])
 
         for m in mt:
-            # Add possible move to possible moves with goodness from weighted values
-            moves.append(Move(m, weighted_value(d, idx), 'attack'))
+            val = weighted_value(d, idx)
+
+            if val:
+                # Add possible move to possible moves with goodness from weighted values
+                moves.append(Move(m, val, 'attack'))
 
     return moves
 
