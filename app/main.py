@@ -87,8 +87,39 @@ def food(game):
         #   i.e. if food is to the top right, possible moves are up and right
         mt = game.me.moves_to(game.foods[idx])
         for m in mt:
-            # Add possible move to possible moves with inverse distance as goodness
+            # Add possible move to possible moves with goodness from weighted values
             moves.append(Move(m, weighted_value(snake_size_ratio, d, health)))
+
+    return moves
+
+
+def attack(game):
+    """Return good moves towards attack goodness, determined by the weighted value function"""
+    moves = []
+    my_size = game.me.length()
+
+    def weighted_value(distance, snake_index):
+        other_snake = game.snakes[snake_index]
+
+        if other_snake.length() >= my_size:
+            return 0
+
+        return 1/distance
+
+    if len(game.snakes) <= 0:
+        return moves
+
+    # Get a list of distances to all snake heads
+    head_coords = [snake.head() for snake in game.snakes]
+    head_distances = map(lambda h: game.me.head().distance(h), head_coords)
+
+    for idx, d in enumerate(head_distances):
+        # Find possible moves towards the snake heads
+        mt = game.me.moves_to(head_coords[idx])
+
+        for m in mt:
+            # Add possible move to possible moves with goodness from weighted values
+            moves.append(Move(m, weighted_value(d, idx)))
 
     return moves
 
@@ -131,7 +162,8 @@ def move():
 
     # Good positions
     food_moves = food(game)
-    good = utils.flatten([food_moves, directions])
+    attack_moves = attack(game)
+    good = utils.flatten([food_moves, attack_moves, directions])
 
     print('\n--- critcal')
     for c in critcal:
