@@ -7,6 +7,7 @@ from move import Move
 from coord import UP, DOWN, LEFT, RIGHT
 from game import Game
 from crashing import crashing_moves
+from wayout import way_out
 
 
 @bottle.route('/static/<path:path>')
@@ -177,7 +178,8 @@ def move():
     # Critcal positions
     not_safe = unsafe_moves(game)
     crashing = crashing_moves(game)
-    critcal = utils.flatten([not_safe, crashing])
+    wayout = way_out(game)
+    critcal = utils.flatten([not_safe, crashing, wayout])
 
     # Good positions
     food_moves = food(game)
