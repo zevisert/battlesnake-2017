@@ -62,6 +62,8 @@ def food(game):
     """Return good moves towards food goodness is determined by the weighted value function."""
     moves = []
 
+    snake_length_ratio = utils.average_length(snakes=game.snakes)/game.me.length()
+
     closest_foods = []
     # Only consider food we are the closest snake too
     for f in game.foods:
@@ -74,10 +76,11 @@ def food(game):
 
     def weighted_value(distance, health):
         distance_weight = 1 / distance
-        health_weight = 1 - (health / 100)
+        health_weight = 1 / health
+        length_compare_weight = 1 if snake_length_ratio > 1 else 0
 
         # Return a value between 0 and 1
-        return (distance_weight + health_weight)/2
+        return (distance_weight + health_weight + length_compare_weight)/3
 
     if len(closest_foods) <= 0:
         return moves
