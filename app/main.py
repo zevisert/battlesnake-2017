@@ -75,13 +75,16 @@ def food(game):
         if game.me.head().distance(f) <= min_dist:
             closest_foods.append(f)
 
-    if len(closest_foods) == 0:
+    if len(closest_foods) <= 0:
         closest_foods = game.foods
 
     def weighted_value(distance, health):
         distance_weight = 1 / distance
         health_weight = 1 / health
         length_compare_weight = 1 if snake_length_ratio > 1 else 0
+
+        if health <= 20:
+            health_weight += 0.33
 
         # Return a value between 0 and 1
         return (distance_weight + health_weight + length_compare_weight)/3
@@ -116,7 +119,7 @@ def attack(game):
         if other_snake.length() >= my_size:
             return 0
 
-        return 1/distance + (0.01 * (my_size - other_snake.length()))
+        return 1/(distance) + (0.01 * (my_size - other_snake.length()))
 
     if len(game.snakes) <= 0:
         return moves
