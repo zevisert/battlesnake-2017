@@ -63,8 +63,8 @@ def food(game):
     moves = []
 
     def weighted_value(size_ratio, distance, health):
-        distance_weight = 1/distance
-        health_weight = 1 - (health/100)
+        distance_weight = 1 / distance
+        health_weight = 1 - (health / 100)
 
         # If the average snake length is greater than ours, weight more towards getting food
         size_diff_weight = 1 if size_ratio > 1 else 0
@@ -88,7 +88,7 @@ def food(game):
         mt = game.me.moves_to(game.foods[idx])
         for m in mt:
             # Add possible move to possible moves with goodness from weighted values
-            moves.append(Move(m, weighted_value(snake_size_ratio, d, health)))
+            moves.append(Move(m, weighted_value(snake_size_ratio, d, health), 'food'))
 
     return moves
 
@@ -119,7 +119,7 @@ def attack(game):
 
         for m in mt:
             # Add possible move to possible moves with goodness from weighted values
-            moves.append(Move(m, weighted_value(d, idx)))
+            moves.append(Move(m, weighted_value(d, idx), 'attack'))
 
     return moves
 
@@ -150,10 +150,10 @@ def move():
 
     # Possible directions we can move
     directions = [
-        Move(UP, 0.01),
-        Move(DOWN, 0.01),
-        Move(LEFT, 0.01),
-        Move(RIGHT, 0.01)
+        Move(UP, 0.01, 'default'),
+        Move(DOWN, 0.01, 'default'),
+        Move(LEFT, 0.01, 'default'),
+        Move(RIGHT, 0.01, 'default')
     ]
 
     # Critcal positions
@@ -196,7 +196,7 @@ def move():
 
     return {
         'move': move.direction,
-        'taunt': 'sneksnek'
+        'taunt': move.taunt
     }
 
 
