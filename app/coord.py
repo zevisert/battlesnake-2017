@@ -45,6 +45,13 @@ class Coord:
         """Return down left Coord."""
         return Coord([self.x - 1, self.y + 1])
 
+    def is_neighbour(self, other, diagonal):
+        """Return if other coord is a neighbour to self."""
+        neighbours = [self.up(), self.down(), self.right(), self.left()]
+        if diagonal:
+            neighbours = neighbours + [self.upright(), self.upleft(), self.downright(), self.downleft()]
+        return other in neighbours
+
     def distance(self, other):
         """Return euclidean distance to another coordinate."""
         d = math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
