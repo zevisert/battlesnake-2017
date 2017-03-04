@@ -4,9 +4,9 @@ import random
 
 import utils
 from move import Move
-from copy import deepcopy
 from coord import UP, DOWN, LEFT, RIGHT
 from game import Game
+from crashing import crashing_moves
 
 
 @bottle.route('/static/<path:path>')
@@ -158,7 +158,8 @@ def move():
 
     # Critcal positions
     not_safe = unsafe_moves(game)
-    critcal = utils.flatten([not_safe])
+    crashing = crashing_moves(game)
+    critcal = utils.flatten([not_safe, crashing])
 
     # Good positions
     food_moves = food(game)
@@ -187,7 +188,8 @@ def move():
 
     # We lost :(
     if move is None:
-        move = random.choice(directions)
+        # If not "good" moves, choose the least bad one
+        move = choose_best_move(critcal)
         print('No best move')
     else:
         print(move)

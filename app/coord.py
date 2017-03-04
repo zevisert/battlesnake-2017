@@ -45,12 +45,15 @@ class Coord:
         """Return down left Coord."""
         return Coord([self.x - 1, self.y + 1])
 
-    def is_neighbour(self, other, diagonal):
-        """Return if other coord is a neighbour to self."""
+    def neighbours(self, diagonal):
         neighbours = [self.up(), self.down(), self.right(), self.left()]
         if diagonal:
             neighbours = neighbours + [self.upright(), self.upleft(), self.downright(), self.downleft()]
-        return other in neighbours
+        return neighbours
+
+    def is_neighbour(self, other, diagonal):
+        """Return if other coord is a neighbour to self."""
+        return other in self.neighbours(diagonal)
 
     def distance(self, other):
         """Return euclidean distance to another coordinate."""
@@ -66,3 +69,6 @@ class Coord:
 
     def __str__(self):
         return "(" + str(self.x) + ", " + str(self.y) + ")"
+
+    def __hash__(self):
+        return hash(self.x) ^ hash(self.y)
