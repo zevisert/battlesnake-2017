@@ -44,10 +44,10 @@ def unsafe_moves(game):
     head = game.me.head()
 
     neighbours = [
-        {'d': head.up(), 'm': Move(UP, 0)},
-        {'d': head.down(), 'm': Move(DOWN, 0)},
-        {'d': head.left(), 'm': Move(LEFT, 0)},
-        {'d': head.right(), 'm': Move(RIGHT, 0)}
+        {'d': head.up(), 'm': Move(UP, 0, 'unsafe')},
+        {'d': head.down(), 'm': Move(DOWN, 0, 'unsafe')},
+        {'d': head.left(), 'm': Move(LEFT, 0, 'unsafe')},
+        {'d': head.right(), 'm': Move(RIGHT, 0, 'unsafe')}
     ]
 
     # If neighbour move is unsafe, add to banned moves
@@ -94,7 +94,7 @@ def food(game):
 
 
 def attack(game):
-    """Return good moves towards attack goodness, determined by the weighted value function"""
+    """Return good moves towards attack goodness, determined by the weighted value function."""
     moves = []
     my_size = game.me.length()
 

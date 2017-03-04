@@ -29,6 +29,6 @@ def crashing_moves(game):
                 goodness = 0
                 if n not in game.foods:
                     goodness = 0.5
-                banned_moves = banned_moves + map(lambda d: Move(d, goodness), game.me.moves_to(n))
+                banned_moves = banned_moves + map(lambda d: Move(d, goodness, 'crashing'), game.me.moves_to(n))
 
     return banned_moves
