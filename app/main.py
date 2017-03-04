@@ -130,10 +130,6 @@ def move():
     crashing = crashing_moves(game)
     critcal = utils.flatten([not_safe, crashing])
 
-    print('\n--- crashing')
-    for m in crashing:
-        print(str(m))
-
     # Good positions
     food_moves = food(game)
     good = utils.flatten([food_moves, directions])
@@ -160,7 +156,8 @@ def move():
 
     # We lost :(
     if move is None:
-        move = random.choice(directions)
+        # If not "good" moves, choose the least bad one
+        move = choose_best_move(critcal)
         print('No best move')
     else:
         print(move)

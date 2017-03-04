@@ -16,21 +16,19 @@ def crashing_moves(game):
         if s.length() < game.me.length():
             continue
 
-        print('\n--- To Snake -> ' + s.name)
         other_neigh = s.head().neighbours(False)
         same_neighbours = utils.intersect(our_neigh, other_neigh)
-
-        print('--- other')
-        print(other_neigh)
-        print('--- ours')
-        print(our_neigh)
-        print('--- same')
-        print(same_neighbours)
 
         # If we have some of the same neighbours,
         #   don't move in that direction
         if len(same_neighbours) > 0:
             for n in same_neighbours:
-                banned_moves = banned_moves + map(lambda d: Move(d, 0), game.me.moves_to(n))
+                # Rank how bad the move is
+                # if there we are sharing a neighbour that is a food, that is really bad
+                # if we are just sharing a neighbour, less bad
+                goodness = 0
+                if n not in game.foods:
+                    goodness = 0.5
+                banned_moves = banned_moves + map(lambda d: Move(d, goodness), game.me.moves_to(n))
 
     return banned_moves

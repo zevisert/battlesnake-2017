@@ -52,7 +52,7 @@ class Game:
         for c in self.snake_coords:
             matrix[c.y][c.x] = 1
 
-        self.print_matrix(matrix)
+        # self.print_matrix(matrix)
 
         return matrix
 
