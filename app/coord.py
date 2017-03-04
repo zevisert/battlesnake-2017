@@ -14,20 +14,43 @@ class Coord:
         self.y = c[1]
 
     def up(self):
-        """Return up direction."""
+        """Return up Coord."""
         return Coord([self.x, self.y - 1])
 
     def down(self):
-        """Return down direction."""
+        """Return down Coord."""
         return Coord([self.x, self.y + 1])
 
     def left(self):
-        """Return left direction."""
+        """Return left Coord."""
         return Coord([self.x - 1, self.y])
 
     def right(self):
-        """Return up direction."""
+        """Return up Coord."""
         return Coord([self.x + 1, self.y])
+
+    def upright(self):
+        """Return up right Coord."""
+        return Coord([self.x + 1, self.y - 1])
+
+    def downright(self):
+        """Return down right Coord."""
+        return Coord([self.x + 1, self.y + 1])
+
+    def upleft(self):
+        """Return up left Coord."""
+        return Coord([self.x - 1, self.y - 1])
+
+    def downleft(self):
+        """Return down left Coord."""
+        return Coord([self.x - 1, self.y + 1])
+
+    def is_neighbour(self, other, diagonal):
+        """Return if other coord is a neighbour to self."""
+        neighbours = [self.up(), self.down(), self.right(), self.left()]
+        if diagonal:
+            neighbours = neighbours + [self.upright(), self.upleft(), self.downright(), self.downleft()]
+        return other in neighbours
 
     def distance(self, other):
         """Return euclidean distance to another coordinate."""
