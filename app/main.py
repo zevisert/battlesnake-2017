@@ -4,9 +4,9 @@ import random
 
 import utils
 from move import Move
-from copy import deepcopy
 from coord import UP, DOWN, LEFT, RIGHT
 from game import Game
+from crashing import crashing_moves
 
 
 @bottle.route('/static/<path:path>')
@@ -113,7 +113,12 @@ def move():
 
     # Critcal positions
     not_safe = unsafe_moves(game)
-    critcal = utils.flatten([not_safe])
+    crashing = crashing_moves(game)
+    critcal = utils.flatten([not_safe, crashing])
+
+    print('\n--- crashing')
+    for m in crashing:
+        print(str(m))
 
     # Good positions
     food_moves = food(game)
