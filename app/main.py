@@ -116,7 +116,7 @@ def attack(game):
         if other_snake.length() >= my_size:
             return 0
 
-        return 1/distance + (0.1 * (my_size - other_snake.length()))
+        return 1/distance + (0.05 * (my_size - other_snake.length()))
 
     if len(game.snakes) <= 0:
         return moves
