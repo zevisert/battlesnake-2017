@@ -113,7 +113,7 @@ def attack(game):
     def weighted_value(distance, snake_index):
         other_snake = game.snakes[snake_index]
 
-        if other_snake.length() >= my_size:
+        if other_snake.length() >= my_size + 1:
             return 0
 
         return 1/distance + (0.05 * (my_size - other_snake.length()))
