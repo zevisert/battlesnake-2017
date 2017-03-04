@@ -65,9 +65,13 @@ def food(game):
     closest_foods = []
     # Only consider food we are the closest snake too
     for f in game.foods:
+        min_dist = game.width * game.height
         for s in game.other_snakes:
-            if game.me.head().distance(f) <= s.head().distance(f):
-                closest_foods.append(f)
+            if s.head().distance(f) < min_dist:
+                min_dist = s.head().distance(f)
+
+        if game.me.head().distance(f) <= min_dist:
+            closest_foods.append(f)
 
     if len(closest_foods) == 0:
         closest_foods = game.foods
