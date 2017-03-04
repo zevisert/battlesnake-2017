@@ -80,11 +80,11 @@ def food(game):
 
     def weighted_value(distance, health):
         distance_weight = 1 / distance
-        health_weight = 1 / health
+        health_weight = 1 / (health + 0.01)
         length_compare_weight = 1 if snake_length_ratio > 1 else 0
 
-        if health <= 20:
-            health_weight += 0.33
+        if health < 50:
+            health_weight += 0.20 * (50 - health)
 
         # Return a value between 0 and 1
         return (distance_weight + health_weight + length_compare_weight)/3
