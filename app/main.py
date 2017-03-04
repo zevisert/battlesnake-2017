@@ -62,6 +62,16 @@ def food(game):
     """Return good moves towards food goodness is determined by the weighted value function."""
     moves = []
 
+    closest_foods = []
+    # Only consider food we are the closest snake too
+    for f in game.foods:
+        for s in game.other_snakes:
+            if game.me.head().distance(f) <= s.head().distance(f):
+                closest_foods.append(f)
+
+    if len(closest_foods) == 0:
+        closest_foods = game.foods
+
     def weighted_value(distance, health):
         distance_weight = 1 / distance
         health_weight = 1 - (health / 100)
@@ -69,18 +79,18 @@ def food(game):
         # Return a value between 0 and 1
         return (distance_weight + health_weight)/2
 
-    if len(game.foods) <= 0:
+    if len(closest_foods) <= 0:
         return moves
 
     # Get a list of distances to all foods
-    food_distances = map(lambda c: game.me.head().distance(c), game.foods)
+    food_distances = map(lambda c: game.me.head().distance(c), closest_foods)
 
     health = game.me.health_points
 
     for idx, d in enumerate(food_distances):
         # Find possible moves towards the foods
         #   i.e. if food is to the top right, possible moves are up and right
-        mt = game.me.moves_to(game.foods[idx])
+        mt = game.me.moves_to(closest_foods[idx])
         for m in mt:
             # Add possible move to possible moves with goodness from weighted values
             moves.append(Move(m, weighted_value(d, health), 'food'))
