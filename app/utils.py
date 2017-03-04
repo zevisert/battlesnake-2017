@@ -12,3 +12,8 @@ def map_to_one(v, l, h):
 def intersect(a, b):
     """Return the intersection of two lists."""
     return list(set(a) & set(b))
+
+
+def average_length(snakes):
+    """Get average length for a list of snakes"""
+    return sum([snake.length() for snake in snakes])/len(snakes)

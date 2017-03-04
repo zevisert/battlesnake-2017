@@ -59,14 +59,28 @@ def unsafe_moves(game):
 
 
 def food(game):
-    """Return good moves towards food goodness is width * height - distance_to_food."""
-    if len(game.foods) <= 0:
-        return []
-
+    """Return good moves towards food goodness is determined by the weighted value function."""
     moves = []
+
+    def weighted_value(size_ratio, distance, health):
+        distance_weight = 1/distance
+        health_weight = 1 - (health/100)
+
+        # If the average snake length is greater than ours, weight more towards getting food
+        size_diff_weight = 1 if size_ratio > 1 else 0
+
+        # Return a value between 0 and
+        return (distance_weight + health_weight + size_diff_weight)/3
+
+    if len(game.foods) <= 0:
+        return moves
 
     # Get a list of distances to all foods
     food_distances = map(lambda c: game.me.head().distance(c), game.foods)
+
+    avg_snake_size = utils.average_length(game.snakes)
+    snake_size_ratio = avg_snake_size/game.me.length()
+    health = game.me.health_points
 
     for idx, d in enumerate(food_distances):
         # Find possible moves towards the foods
@@ -74,7 +88,7 @@ def food(game):
         mt = game.me.moves_to(game.foods[idx])
         for m in mt:
             # Add possible move to possible moves with inverse distance as goodness
-            moves.append(Move(m, 1 / d))
+            moves.append(Move(m, weighted_value(snake_size_ratio, d, health)))
 
     return moves
 
