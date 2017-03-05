@@ -230,7 +230,8 @@ def move():
     if move is None:
         # If not "good" moves, choose the least bad one
         better_moves = utils.flatten([crashing, wayout])
-        move = choose_best_move(better_moves)
+        available = remove_critical(good, better_moves)
+        move = choose_best_move(available)
 
     # print('\n--- move')
     # print(move)
