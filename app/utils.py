@@ -98,6 +98,9 @@ def flood_fill(game, coord):
             # Keep track of total found space
             space += 1
 
+            if space > 2*game.me.length():
+                return space
+
             # 11. If the color of the node to the north of n is target-color, add that node to Q.
             y = point.up().y
             y = clamp(y, 0, game.height)
