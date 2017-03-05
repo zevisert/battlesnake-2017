@@ -229,7 +229,11 @@ def move():
     # We lost :(
     if move is None:
         # If not "good" moves, choose the least bad one
-        move = choose_best_move(critcal)
+        better_moves = []
+        for m in critcal:
+            if m not in flood:
+                better_moves.append(m)
+        move = choose_best_move(better_moves)
 
     # print('\n--- move')
     # print(move)
