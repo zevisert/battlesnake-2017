@@ -65,7 +65,6 @@ def flood_fill(game, coord):
 
     # 5. For each element N of Q:
     space = 0
-    print("Testing if [{},{}] is safe to move to".format(coord.x, coord.y))
     while not Q.empty():
 
         # 6. Set west and east equal to the current spot.
@@ -112,10 +111,6 @@ def flood_fill(game, coord):
                 Q.put(board[y][x])
 
             # 13. Continue looping until Q is exhausted.
-
-
-    print("=== SPACE AVAILABLE: {}".format(space))
-    print("=== MY LENGTH : {}".format(game.me.length()))
 
     return space
 
