@@ -173,7 +173,7 @@ def critical_flood(game):
             continue
 
         area = utils.flood_fill(game, n['d'])
-        print(n['m'].direction + ' - ' + str(area) + ' | ' + str(game.me.length()))
+        # print(n['m'].direction + ' - ' + str(area) + ' | ' + str(game.me.length()))
         if game.me.length() > area:
             banned_moves.append(n['m'])
 
@@ -203,22 +203,22 @@ def move():
     flood = critical_flood(game)
     critcal = utils.flatten([not_safe, crashing, wayout, flood])
 
-    print('\n--- critical')
-    for c in critcal:
-        print(str(c))
+    # print('\n--- critical')
+    # for c in critcal:
+    #     print(str(c))
 
-    print('\n--- flood')
-    for c in flood:
-        print(str(c))
+    # print('\n--- flood')
+    # for c in flood:
+        # print(str(c))
 
     # Good positions
     food_moves = food(game)
     attack_moves = attack(game)
     good = utils.flatten([food_moves, attack_moves, directions])
 
-    print('\n--- good')
-    for c in good:
-        print(str(c))
+    # print('\n--- good')
+    # for c in good:
+    #     print(str(c))
 
     # Remove critical moves from good moves
     available = remove_critical(good, critcal)
@@ -230,6 +230,9 @@ def move():
     if move is None:
         # If not "good" moves, choose the least bad one
         move = choose_best_move(critcal)
+
+    # print('\n--- move')
+    # print(move)
 
     return {
         'move': move.direction,
