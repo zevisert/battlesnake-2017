@@ -235,6 +235,8 @@ def move():
             if m not in flood and m not in not_safe:
                 better_moves.append(m)
         move = choose_best_move(better_moves)
+        if move is None:
+            move = random.choice(directions)
 
     # print('\n--- move')
     # print(move)
