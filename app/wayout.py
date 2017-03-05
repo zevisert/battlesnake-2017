@@ -24,3 +24,5 @@ def way_out(game):
 
         if side_sum >= 2:
             banned_moves.append(c['m'])
+
+    return banned_moves
