@@ -1,6 +1,6 @@
 import Queue
 
-from app.coord import Coord
+from coord import Coord
 
 
 def flatten(l):

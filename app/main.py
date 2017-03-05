@@ -157,6 +157,28 @@ def choose_best_move(moves):
     return moves[0]
 
 
+def critical_flood(game):
+    banned_moves = []
+
+    head = game.me.head()
+    neighbours = [
+        {'d': head.up(), 'm': Move(UP, 0, 'unsafe')},
+        {'d': head.down(), 'm': Move(DOWN, 0, 'unsafe')},
+        {'d': head.left(), 'm': Move(LEFT, 0, 'unsafe')},
+        {'d': head.right(), 'm': Move(RIGHT, 0, 'unsafe')}
+    ]
+
+    for n in neighbours:
+        if game.is_unsafe(n['d']):
+            continue
+
+        area = utils.flood_fill(game, n['d'])
+        if area <= game.me.length() + 1:
+            banned_moves.append(n['m'])
+
+    return banned_moves
+
+
 @bottle.post('/move')
 def move():
     """Make a move."""
@@ -179,7 +201,8 @@ def move():
     not_safe = unsafe_moves(game)
     crashing = crashing_moves(game)
     wayout = way_out(game)
-    critcal = utils.flatten([not_safe, crashing, wayout])
+    flood = critical_flood(game)
+    critcal = utils.flatten([not_safe, crashing, wayout, flood])
 
     # Good positions
     food_moves = food(game)
