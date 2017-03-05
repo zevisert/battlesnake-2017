@@ -173,7 +173,7 @@ def critical_flood(game):
             continue
 
         area = utils.flood_fill(game, n['d'])
-        # print(n['m'].direction + ' - ' + str(area) + ' | ' + str(game.me.length()))
+        print(n['m'].direction + ' - ' + str(area) + ' | ' + str(game.me.length()))
         if game.me.length() > area:
             banned_moves.append(n['m'])
 
