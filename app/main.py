@@ -179,6 +179,30 @@ def critical_flood(game):
 
     return banned_moves
 
+def get_largest_area(game):
+    head = game.me.head()
+    neighbours = [
+        {'d': head.up(), 'm': Move(UP, 0, 'flood unsafe')},
+        {'d': head.down(), 'm': Move(DOWN, 0, 'flood unsafe')},
+        {'d': head.left(), 'm': Move(LEFT, 0, 'flood unsafe')},
+        {'d': head.right(), 'm': Move(RIGHT, 0, 'flood unsafe')}
+    ]
+
+    max_area = -1
+    max_move = neighbours[0]
+    for n in neighbours:
+        if game.is_unsafe(n['d']):
+            continue
+
+        area = utils.flood_fill(game, n['d'])
+        # print(n['m'].direction + ' - ' + str(area) + ' | ' + str(game.me.length()))
+        if area > max_area:
+            max_area = area
+            max_move = n['m']
+
+    return max_move
+
+
 
 @bottle.post('/move')
 def move():
@@ -236,7 +260,10 @@ def move():
                 better_moves.append(m)
         move = choose_best_move(better_moves)
         if move is None:
-            move = random.choice(directions)
+            move = get_largest_area(game)
+
+            if move is None:
+                move = random.choice(directions)
 
     # print('\n--- move')
     # print(move)
