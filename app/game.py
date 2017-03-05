@@ -42,7 +42,7 @@ class Game:
 
     def create_board_matrix(self):
         """Create a matrix representation of the board."""
-        matrix = [[0 for x in range(self.width + 1)] for y in range(self.height + 1)]
+        matrix = [[0 for x in range(self.width + 2)] for y in range(self.height + 2)]
 
         # Add walls on edges
         for i in range(len(matrix[0])):
@@ -54,7 +54,7 @@ class Game:
 
         # Add walls for other snakes and our tail
         for c in self.snake_coords:
-            matrix[c.y][c.x] = 1
+            matrix[c.y + 1][c.x + 1] = 1
 
         # self.print_matrix(matrix)
 
