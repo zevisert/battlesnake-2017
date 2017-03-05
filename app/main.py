@@ -33,7 +33,7 @@ def start():
         'color': '#09A8FA',
         'taunt': 'ha',
         'head_url': head_url,
-        'name': 'dave',
+        'name': 'notice me pls',
         'head_type': 'safe',
         'tail_type': 'freckled'
     }
@@ -182,8 +182,6 @@ def critical_flood(game):
 @bottle.post('/move')
 def move():
     """Make a move."""
-    print('\n--- MAKING MOVE')
-
     data = bottle.request.json
 
     # Create game state
@@ -209,13 +207,6 @@ def move():
     attack_moves = attack(game)
     good = utils.flatten([food_moves, attack_moves, directions])
 
-    print('\n--- critcal')
-    for c in critcal:
-        print(str(c))
-
-    print('\n--- good')
-    for c in good:
-        print(str(c))
 
     # Remove critical moves from good moves
     available = remove_critical(good, critcal)
@@ -223,19 +214,10 @@ def move():
     # Choose best move based on goodness
     move = choose_best_move(available)
 
-    print('\n--- available')
-    for c in available:
-        print(str(c))
-
-    print('\n--- move')
-
     # We lost :(
     if move is None:
         # If not "good" moves, choose the least bad one
         move = choose_best_move(critcal)
-        print('No best move')
-    else:
-        print(move)
 
     return {
         'move': move.direction,
