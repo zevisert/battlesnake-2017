@@ -20,9 +20,13 @@ class Game:
         self.me = list(filter(lambda s: s.id == self.mid, self.snakes))[0]
         self.board = self.create_board_matrix()
 
+    def is_wall(self, coord):
+        """Return if coordinate is wall or not."""
+        return coord.y < 0 or coord.y >= self.height or coord.x < 0 or coord.x >= self.width:
+
     def is_safe(self, coord):
         """Return if a coordinate is safe or not."""
-        if coord.y < 0 or coord.y >= self.height or coord.x < 0 or coord.x >= self.width:
+        if self.is_wall(coord):
             return False
 
         return coord not in self.snake_coords

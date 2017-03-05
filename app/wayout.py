@@ -4,7 +4,7 @@ from move import Move
 
 def way_out(game):
     """Return potential moves that are surrounded by 3 or more unsafe things."""
-    banned_moves = []
+    moves = []
 
     head = game.me.head()
     neighbours = [
@@ -19,10 +19,10 @@ def way_out(game):
         side_sum = 0
         # Check the neighbours of potential moves
         for n in c['d'].neighbours(False):
-            if game.is_unsafe(n):
+            if game.is_unsafe(n) and not game.is_wall(n):
                 side_sum += 1
 
         if side_sum >= 3:
-            banned_moves.append(c['m'])
+            moves.append(c['m'])
 
-    return banned_moves
+    return moves
