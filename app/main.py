@@ -33,7 +33,7 @@ def start():
         'color': '#09A8FA',
         'taunt': 'ha',
         'head_url': head_url,
-        'name': 'dave',
+        'name': 'notice me pls',
         'head_type': 'safe',
         'tail_type': 'freckled'
     }
