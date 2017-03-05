@@ -162,10 +162,10 @@ def critical_flood(game):
 
     head = game.me.head()
     neighbours = [
-        {'d': head.up(), 'm': Move(UP, 0, 'unsafe')},
-        {'d': head.down(), 'm': Move(DOWN, 0, 'unsafe')},
-        {'d': head.left(), 'm': Move(LEFT, 0, 'unsafe')},
-        {'d': head.right(), 'm': Move(RIGHT, 0, 'unsafe')}
+        {'d': head.up(), 'm': Move(UP, 0, 'flood unsafe')},
+        {'d': head.down(), 'm': Move(DOWN, 0, 'flood unsafe')},
+        {'d': head.left(), 'm': Move(LEFT, 0, 'flood unsafe')},
+        {'d': head.right(), 'm': Move(RIGHT, 0, 'flood unsafe')}
     ]
 
     for n in neighbours:
@@ -174,7 +174,7 @@ def critical_flood(game):
 
         area = utils.flood_fill(game, n['d'])
         print(n['m'].direction + ' - ' + str(area) + ' | ' + str(game.me.length()))
-        if game.me.length() + 1 <= area:
+        if game.me.length() > area:
             banned_moves.append(n['m'])
 
     return banned_moves
