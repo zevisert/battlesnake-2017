@@ -17,7 +17,7 @@ def way_out(game):
     # Loop through possible moves
     for c in neighbours:
         side_sum = 0
-        if game.is_unsafe(c):
+        if game.is_unsafe(c['d']):
             continue
         # Check the neighbours of potential moves
         for n in c['d'].neighbours(False):
