@@ -173,7 +173,7 @@ def critical_flood(game):
             continue
 
         area = utils.flood_fill(game, n['d'])
-        print(n['m'].direction + ' - ' + str(area) + ' | ' + str(game.me.length()))
+        # print(n['m'].direction + ' - ' + str(area) + ' | ' + str(game.me.length()))
         if game.me.length() > area:
             banned_moves.append(n['m'])
 
@@ -229,7 +229,11 @@ def move():
     # We lost :(
     if move is None:
         # If not "good" moves, choose the least bad one
-        move = choose_best_move(critcal)
+        better_moves = []
+        for m in critcal:
+            if m not in flood:
+                better_moves.append(m)
+        move = choose_best_move(better_moves)
 
     # print('\n--- move')
     # print(move)
