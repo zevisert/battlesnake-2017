@@ -12,6 +12,8 @@ def map_to_one(v, l, h):
     """Map a value v in range (l, h) to (0, 1)."""
     return ((v - l) / (h - l)) * (1 - 0) + 0
 
+def clamp(point, min, max):
+    return min if point < min else max if point > max else point
 
 def intersect(a, b):
     """Return the intersection of two lists."""
@@ -25,12 +27,11 @@ def average_length(snakes):
 
 def flood_fill(game, coord):
     '''
-    Flood-fill (node, target-color, replacement-color):
-     1. If target-color is equal to replacement-color, return.
-     2. If color of node is not equal to target-color, return.
-
+    Flood fill an area to check if it's large enough to enter
+    :param game: A game object
+    :param coord: A coordinate to try
+    :return: Number of empty cells immediately reachable if this move is chosen
     '''
-
     class Cell(Coord):
         def __init__(self, c, type):
             Coord.__init__(self, c)
@@ -44,15 +45,9 @@ def flood_fill(game, coord):
             return self.__str__()
 
     def markup(board):
-        cells = [[Cell([x,y], cell) for x, cell in enumerate(row)] for y, row in enumerate(board)]
-
-        return cells
-
-    def clamp(point, min, max):
-        return min if point < min else max if point > max else point
+        return [[Cell([x,y], cell) for x, cell in enumerate(row)] for y, row in enumerate(board)]
 
     board = markup(game.board)
-
 
     # 3. Set Q to the empty queue.
     Q = Queue.Queue()
@@ -101,19 +96,17 @@ def flood_fill(game, coord):
             if space > 2*game.me.length():
                 return space
 
-            # 11. If the color of the node to the north of n is target-color, add that node to Q.
-            y = point.up().y
-            y = clamp(y, 0, game.height)
+            # 11. If the cell to the north of this is unvisited, add that cell to Q.
+            y = clamp(point.up().y, 0, game.height)
             if not board[y][x].visited and board[y][x].wall != 1:
                 Q.put(board[y][x])
 
-            # 12. If the color of the node to the south of n is target-color, add that node to Q.
-            y = point.down().y
-            y = clamp(y, 0, game.height)
+            # 12. If the cell to the south of this is unvisited, add that cell to Q.
+            y = clamp(point.down().y, 0, game.height)
             if not board[y][x].visited and board[y][x].wall != 1:
                 Q.put(board[y][x])
 
-            # 13. Continue looping until Q is exhausted.
+            # 13. Continue looping until Q is exhausted or there's enough space
 
     return space
 
