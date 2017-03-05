@@ -229,9 +229,12 @@ def move():
     # We lost :(
     if move is None:
         # If not "good" moves, choose the least bad one
-        better_moves = utils.flatten([crashing, wayout])
-        available = remove_critical(good, better_moves)
-        move = choose_best_move(available)
+        new_crit = utils.flatten([crashing, wayout])
+        better_moves = []
+        for m in new_crit:
+            if m not in flood and m not in not_safe:
+                better_moves.append(m)
+        move = choose_best_move(better_moves)
 
     # print('\n--- move')
     # print(move)
