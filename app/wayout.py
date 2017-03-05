@@ -22,7 +22,7 @@ def way_out(game):
             if game.is_unsafe(n):
                 side_sum += 1
 
-        if side_sum >= 2:
+        if side_sum >= 3:
             banned_moves.append(c['m'])
 
     return banned_moves
