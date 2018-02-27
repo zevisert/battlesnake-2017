@@ -10,8 +10,12 @@ class Coord:
     """Represents an (x,y) coordinate on the board."""
 
     def __init__(self, c):
-        self.x = c[0]
-        self.y = c[1]
+        if type(c) is dict:
+            self.x = c['x']
+            self.y = c['y']
+        else:
+            self.x = c[0]
+            self.y = c[1]
 
     def up(self):
         """Return up Coord."""
@@ -48,7 +52,12 @@ class Coord:
     def neighbours(self, diagonal):
         neighbours = [self.up(), self.down(), self.right(), self.left()]
         if diagonal:
-            neighbours = neighbours + [self.upright(), self.upleft(), self.downright(), self.downleft()]
+            neighbours = neighbours + [
+                self.upright(),
+                self.upleft(),
+                self.downright(),
+                self.downleft()
+            ]
         return neighbours
 
     def is_neighbour(self, other, diagonal):

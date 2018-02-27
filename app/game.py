@@ -1,6 +1,6 @@
-from snake import Snake
-from coord import Coord
 import utils
+from coord import Coord
+from snake import Snake
 
 
 class Game:
@@ -8,14 +8,15 @@ class Game:
 
     def __init__(self, data):
         """Create a game."""
-        self.mid = data['you']
+        self.mid = data['you']['id']
         self.width = data['width']
         self.height = data['height']
         self.turn = data['turn']
-        self.foods = map(Coord, data['food'])
-        self.dead_snakes = map(Snake, data['dead_snakes'])
-        self.snakes = map(Snake, data['snakes'])
-        self.snake_coords = utils.flatten((map(lambda s: s.coords, self.snakes)))
+        self.foods = map(Coord, data['food']['data'])
+        # self.dead_snakes = map(Snake, data['dead_snakes'])
+        self.snakes = map(Snake, data['snakes']['data'])
+        self.snake_coords = utils.flatten((map(lambda s: s.coords,
+                                               self.snakes)))
         self.other_snakes = filter(lambda s: s.id != self.mid, self.snakes)
         self.me = list(filter(lambda s: s.id == self.mid, self.snakes))[0]
         self.board = self.create_board_matrix()
@@ -42,7 +43,8 @@ class Game:
 
     def create_board_matrix(self):
         """Create a matrix representation of the board."""
-        matrix = [[0 for x in range(self.width + 2)] for y in range(self.height + 2)]
+        matrix = [[0 for x in range(self.width + 2)]
+                  for y in range(self.height + 2)]
 
         # Add walls on edges
         for i in range(len(matrix[0])):
@@ -62,5 +64,6 @@ class Game:
 
     def all_but_head_coords(self):
         """Return a list of all coords that are not our snakes head."""
-        other_coords = utils.flatten(map(lambda s: s.coords, self.other_snakes))
+        other_coords = utils.flatten(
+            map(lambda s: s.coords, self.other_snakes))
         return other_coords + self.me.tail()

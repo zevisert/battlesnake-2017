@@ -1,15 +1,16 @@
-from coord import Coord, UP, DOWN, LEFT, RIGHT
+from coord import DOWN, LEFT, RIGHT, UP, Coord
 
 
 class Snake:
     """Represents a snake."""
 
     def __init__(self, s):
-        self.coords = s['coords']
+        self.coords = s['body']['data']
         self.name = s['name']
         self.id = s['id']
-        self.health_points = s['health_points']
-        self.coords = map(Coord, s['coords'])
+        self.health_points = s['health']
+        self.coords = map(Coord, s['body']['data'])
+        print(self.coords)
 
     def head(self):
         """Return head of snake."""
