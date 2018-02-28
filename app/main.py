@@ -274,7 +274,7 @@ def move():
     food_moves = food(game)
     attack_moves = attack(game)
     chase_moves = chase_tail(game)
-    good = utils.flatten([chase_moves, food_moves, attack_moves, directions])
+    good = utils.flatten([food_moves, attack_moves, directions])
 
     # print('\n--- good')
     # for c in good:
