@@ -1,12 +1,12 @@
-import bottle
 import os
 import random
 
+import bottle
 import utils
-from move import Move
-from coord import UP, DOWN, LEFT, RIGHT
-from game import Game
+from coord import DOWN, LEFT, RIGHT, UP
 from crashing import crashing_moves
+from game import Game
+from move import Move
 from wayout import way_out
 
 
@@ -24,10 +24,8 @@ def start():
     board_width = data['width']
     board_height = data['height']
 
-    head_url = '%s://%s/static/head.png' % (
-        bottle.request.urlparts.scheme,
-        bottle.request.urlparts.netloc
-    )
+    head_url = '%s://%s/static/head.png' % (bottle.request.urlparts.scheme,
+                                            bottle.request.urlparts.netloc)
 
     return {
         'color': '#09A8FA',
@@ -44,12 +42,19 @@ def unsafe_moves(game):
     banned_moves = []
     head = game.me.head()
 
-    neighbours = [
-        {'d': head.up(), 'm': Move(UP, 0, 'unsafe')},
-        {'d': head.down(), 'm': Move(DOWN, 0, 'unsafe')},
-        {'d': head.left(), 'm': Move(LEFT, 0, 'unsafe')},
-        {'d': head.right(), 'm': Move(RIGHT, 0, 'unsafe')}
-    ]
+    neighbours = [{
+        'd': head.up(),
+        'm': Move(UP, 0, 'unsafe')
+    }, {
+        'd': head.down(),
+        'm': Move(DOWN, 0, 'unsafe')
+    }, {
+        'd': head.left(),
+        'm': Move(LEFT, 0, 'unsafe')
+    }, {
+        'd': head.right(),
+        'm': Move(RIGHT, 0, 'unsafe')
+    }]
 
     # If neighbour move is unsafe, add to banned moves
     for n in neighbours:
@@ -60,10 +65,11 @@ def unsafe_moves(game):
 
 
 def food(game):
-    """Return good moves towards food goodness is determined by the weighted value function."""
+    """Return good moves towards food, goodness is determined by the weighted value function."""
     moves = []
 
-    snake_length_ratio = utils.average_length(snakes=game.snakes)/game.me.length()
+    snake_length_ratio = utils.average_length(
+        snakes=game.snakes) / game.me.length()
 
     closest_foods = []
     # Only consider food we are the closest snake too
@@ -80,15 +86,15 @@ def food(game):
         closest_foods = game.foods
 
     def weighted_value(distance, health):
-        distance_weight = 1 / distance
+        distance_weight = 1 / (distance * 0.5)
         health_weight = 1 / (health + 0.01)
         length_compare_weight = 1 if snake_length_ratio > 1 else 0
 
-        if health < 50:
+        if health < 25:
             health_weight += 0.20 * (50 - health)
 
         # Return a value between 0 and 1
-        return (distance_weight + health_weight + length_compare_weight)/3
+        return (distance_weight + health_weight + length_compare_weight) / 3
 
     if len(closest_foods) <= 0:
         return moves
@@ -110,7 +116,7 @@ def food(game):
 
 
 def attack(game):
-    """Return good moves towards attack goodness, determined by the weighted value function."""
+    """Return good moves towards attack, goodness determined by the weighted value function."""
     moves = []
     my_size = game.me.length()
 
@@ -120,7 +126,7 @@ def attack(game):
         if other_snake.length() >= my_size:
             return 0
 
-        return 1/(distance) + (0.01 * (my_size - other_snake.length()))
+        return 1 / (distance) + (0.01 * (my_size - other_snake.length()))
 
     if len(game.snakes) <= 0:
         return moves
@@ -143,6 +149,21 @@ def attack(game):
     return moves
 
 
+def chase_tail(game):
+    """Returns good moves towards tail, goodness determined by how far away it is."""
+    moves = []
+    butt = game.me.butt()
+
+    def weighted_value(distance):
+        return 1 / (distance)
+
+    for m in game.me.moves_to(butt):
+        val = weighted_value(game.me.head().distance(butt))
+        moves.append(Move(m, val, 'chase'))
+
+    return moves
+
+
 def remove_critical(moves, banned_moves):
     """Remove all critical moves from possible move."""
     return filter(lambda d: d not in banned_moves, moves)
@@ -161,12 +182,19 @@ def critical_flood(game):
     banned_moves = []
 
     head = game.me.head()
-    neighbours = [
-        {'d': head.up(), 'm': Move(UP, 0, 'flood unsafe')},
-        {'d': head.down(), 'm': Move(DOWN, 0, 'flood unsafe')},
-        {'d': head.left(), 'm': Move(LEFT, 0, 'flood unsafe')},
-        {'d': head.right(), 'm': Move(RIGHT, 0, 'flood unsafe')}
-    ]
+    neighbours = [{
+        'd': head.up(),
+        'm': Move(UP, 0, 'flood unsafe')
+    }, {
+        'd': head.down(),
+        'm': Move(DOWN, 0, 'flood unsafe')
+    }, {
+        'd': head.left(),
+        'm': Move(LEFT, 0, 'flood unsafe')
+    }, {
+        'd': head.right(),
+        'm': Move(RIGHT, 0, 'flood unsafe')
+    }]
 
     for n in neighbours:
         if game.is_unsafe(n['d']):
@@ -179,14 +207,22 @@ def critical_flood(game):
 
     return banned_moves
 
+
 def get_largest_area(game):
     head = game.me.head()
-    neighbours = [
-        {'d': head.up(), 'm': Move(UP, 0, 'flood unsafe')},
-        {'d': head.down(), 'm': Move(DOWN, 0, 'flood unsafe')},
-        {'d': head.left(), 'm': Move(LEFT, 0, 'flood unsafe')},
-        {'d': head.right(), 'm': Move(RIGHT, 0, 'flood unsafe')}
-    ]
+    neighbours = [{
+        'd': head.up(),
+        'm': Move(UP, 0, 'flood unsafe')
+    }, {
+        'd': head.down(),
+        'm': Move(DOWN, 0, 'flood unsafe')
+    }, {
+        'd': head.left(),
+        'm': Move(LEFT, 0, 'flood unsafe')
+    }, {
+        'd': head.right(),
+        'm': Move(RIGHT, 0, 'flood unsafe')
+    }]
 
     max_area = -1
     max_move = neighbours[0]
@@ -201,7 +237,6 @@ def get_largest_area(game):
             max_move = n['m']
 
     return max_move
-
 
 
 @bottle.post('/move')
@@ -233,12 +268,13 @@ def move():
 
     # print('\n--- flood')
     # for c in flood:
-        # print(str(c))
+    # print(str(c))
 
     # Good positions
     food_moves = food(game)
     attack_moves = attack(game)
-    good = utils.flatten([food_moves, attack_moves, directions])
+    chase_moves = chase_tail(game)
+    good = utils.flatten([chase_moves, food_moves, attack_moves, directions])
 
     # print('\n--- good')
     # for c in good:
@@ -268,13 +304,13 @@ def move():
     # print('\n--- move')
     # print(move)
 
-    return {
-        'move': move.direction,
-        'taunt': move.taunt
-    }
+    return {'move': move.direction, 'taunt': move.taunt}
 
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
 if __name__ == '__main__':
-    bottle.run(application, host=os.getenv('IP', '0.0.0.0'), port=os.getenv('PORT', '8080'))
+    bottle.run(
+        application,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=os.getenv('PORT', '8080'))

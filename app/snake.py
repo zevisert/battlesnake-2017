@@ -10,7 +10,6 @@ class Snake:
         self.id = s['id']
         self.health_points = s['health']
         self.coords = map(Coord, s['body']['data'])
-        print(self.coords)
 
     def head(self):
         """Return head of snake."""
@@ -19,6 +18,10 @@ class Snake:
     def tail(self):
         """Return all but head of snake."""
         return self.coords[1:]
+
+    def butt(self):
+        """"Return very last coord of snake"""
+        return self.coords[-1]
 
     def length(self):
         """Return the length of the snake."""

@@ -12,8 +12,10 @@ def map_to_one(v, l, h):
     """Map a value v in range (l, h) to (0, 1)."""
     return ((v - l) / (h - l)) * (1 - 0) + 0
 
+
 def clamp(point, min, max):
     return min if point < min else max if point > max else point
+
 
 def intersect(a, b):
     """Return the intersection of two lists."""
@@ -22,7 +24,7 @@ def intersect(a, b):
 
 def average_length(snakes):
     """Get average length for a list of snakes"""
-    return sum([snake.length() for snake in snakes])/len(snakes)
+    return sum([snake.length() for snake in snakes]) / len(snakes)
 
 
 def flood_fill(game, coord):
@@ -32,6 +34,7 @@ def flood_fill(game, coord):
     :param coord: A coordinate to try
     :return: Number of empty cells immediately reachable if this move is chosen
     '''
+
     class Cell(Coord):
         def __init__(self, c, type):
             Coord.__init__(self, c)
@@ -39,13 +42,16 @@ def flood_fill(game, coord):
             self.visited = False
 
         def __str__(self):
-            return "{}".format("+" if self.wall == 1 and self.visited else "X" if self.wall == 1 else "." if self.visited else " ")
+            return "{}".format("+" if self.wall == 1 and self.visited else "X"
+                               if self.wall == 1 else "."
+                               if self.visited else " ")
 
         def __repr__(self):
             return self.__str__()
 
     def markup(board):
-        return [[Cell([x,y], cell) for x, cell in enumerate(row)] for y, row in enumerate(board)]
+        return [[Cell([x, y], cell) for x, cell in enumerate(row)]
+                for y, row in enumerate(board)]
 
     board = markup(game.board)
 
@@ -82,7 +88,6 @@ def flood_fill(game, coord):
             east = next_east
             next_east = board[next_east.y][next_east.x + 1]
 
-
         # 9. For each cell between west and east:
         for x in range(west.x, east.x + 1):
 
@@ -93,7 +98,7 @@ def flood_fill(game, coord):
             # Keep track of total found space
             space += 1
 
-            if space > 2*game.me.length():
+            if space > 2 * game.me.length():
                 return space
 
             # 11. If the cell to the north of this is unvisited, add that cell to Q.
@@ -109,12 +114,3 @@ def flood_fill(game, coord):
             # 13. Continue looping until Q is exhausted or there's enough space
 
     return space
-
-
-
-
-
-
-
-
-
