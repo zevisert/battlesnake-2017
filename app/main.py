@@ -90,8 +90,8 @@ def food(game):
         health_weight = 1 / (health + 0.01)
         length_compare_weight = 1 if snake_length_ratio > 1 else 0
 
-        if health < 25:
-            health_weight += 0.20 * (50 - health)
+        if health < 35:
+            health_weight += 0.20 * (70 - health)
 
         # Return a value between 0 and 1
         return (distance_weight + health_weight + length_compare_weight) / 3
@@ -154,11 +154,18 @@ def chase_tail(game):
     moves = []
     butt = game.me.butt()
 
-    def weighted_value(distance):
-        return 1 / (distance)
+    if game.me.length() < 4:
+        return []
+
+    val = 0
+    if game.me.head().distance(butt) == 0:
+        val = 2
+    elif game.me.length() % 4 == 0:
+        val = 1.5
+    else:
+        val = 1 / game.me.head().distance(butt)
 
     for m in game.me.moves_to(butt):
-        val = weighted_value(game.me.head().distance(butt))
         moves.append(Move(m, val, 'chase'))
 
     return moves
@@ -274,7 +281,7 @@ def move():
     food_moves = food(game)
     attack_moves = attack(game)
     chase_moves = chase_tail(game)
-    good = utils.flatten([food_moves, attack_moves, directions])
+    good = utils.flatten([chase_moves, food_moves, attack_moves, directions])
 
     # print('\n--- good')
     # for c in good:
