@@ -158,7 +158,7 @@ def chase_tail(game):
         return []
 
     val = 0
-    if game.me.head().distance(butt) == 0:
+    if game.me.head().distance(butt) <= 1:
         val = 4
 
     for m in game.me.moves_to(butt):
