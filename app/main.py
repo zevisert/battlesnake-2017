@@ -28,7 +28,7 @@ def start():
                                             bottle.request.urlparts.netloc)
 
     return {
-        'color': '#09A8FA',
+        'color': '#4d3ae2',
         'taunt': 'ha',
         'head_url': head_url,
         'name': 'notice me pls',
