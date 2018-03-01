@@ -159,11 +159,7 @@ def chase_tail(game):
 
     val = 0
     if game.me.head().distance(butt) == 0:
-        val = 2
-    elif game.me.length() % 4 == 0:
-        val = 1.5
-    else:
-        val = 1 / game.me.head().distance(butt)
+        val = 4
 
     for m in game.me.moves_to(butt):
         moves.append(Move(m, val, 'chase'))
@@ -281,7 +277,7 @@ def move():
     food_moves = food(game)
     attack_moves = attack(game)
     chase_moves = chase_tail(game)
-    good = utils.flatten([food_moves, attack_moves, directions])
+    good = utils.flatten([chase_moves, food_moves, attack_moves, directions])
 
     # print('\n--- good')
     # for c in good:
