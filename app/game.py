@@ -29,8 +29,8 @@ class Game:
         """Return if a coordinate is safe or not."""
         if self.is_wall(coord):
             return False
-        if self.me.butt() == coord and self.me.length() > 2:
-            return True
+        # if self.me.butt() == coord and self.me.length() > 2:
+        #     return True
 
         return coord not in self.snake_coords
 
