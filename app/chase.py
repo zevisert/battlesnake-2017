@@ -1,12 +1,13 @@
+import params
 import utils
 from move import Move
 
 
 def value(game, distance):
     """Return a value representing how much we want to move towards our butt."""
-    if distance == 0:
-        return 1
-    return 1 / (distance + 10)
+    if distance <= 1:
+        return params.CHASE_ONE_VALUE
+    return (1 / distance) * params.CHASE_MULTI
 
 
 def chase(game):

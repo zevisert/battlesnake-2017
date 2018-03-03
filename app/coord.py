@@ -65,9 +65,8 @@ class Coord:
         return other in self.neighbours(diagonal)
 
     def distance(self, other):
-        """Return euclidean distance to another coordinate."""
-        d = math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
-        return d
+        """Return manhattan distance to another coordinate."""
+        return abs(self.x - other.x) + abs(self.y - other.y)
 
     def sub(self, other):
         """Subtract one coordinate from self."""
