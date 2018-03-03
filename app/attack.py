@@ -34,7 +34,7 @@ def attack(game):
 
     for idx, d in enumerate(head_distances):
         # Find possible moves towards the snake heads
-        mt = game.me.moves_to(head_coords[idx])
+        mt = game.me.path_to(game, head_coords[idx])
 
         for m in mt:
             val = value(game, d, game.snakes[idx])
