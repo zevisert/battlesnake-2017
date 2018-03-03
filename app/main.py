@@ -60,7 +60,8 @@ def get_base_moves(game):
     }]
     for n in neighbours:
         if game.is_against_wall(n['d']):
-            n['m'].goodness -= 0.005
+            n['m'].goodness = 0.005
+            print('goodness: ', n['m'].goodness)
             moves.append(n['m'])
     return moves
 
