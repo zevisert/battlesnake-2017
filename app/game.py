@@ -62,7 +62,7 @@ class Game:
 
         # Add snake heads as another type
         for s in self.other_snakes:
-            matrix[s.head.y + 1][s.head.x + 1] = 3
+            matrix[s.head().y + 1][s.head().x + 1] = 3
 
 
         # Mark our butt if we are not going to grow
