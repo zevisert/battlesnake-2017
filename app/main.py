@@ -31,12 +31,12 @@ def start():
                                             bottle.request.urlparts.netloc)
 
     return {
-        'color': '#4d3ae2',
+        'color': '#F2A30F',
         'taunt': 'ha',
         'head_url': head_url,
-        'name': 'notice me pls',
-        'head_type': 'safe',
-        'tail_type': 'freckled'
+        'name': 'SOHCAHTOA,
+        'head_type': 'fang',
+        'tail_type': 'block-bum'
     }
 
 
