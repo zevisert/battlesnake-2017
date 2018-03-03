@@ -44,26 +44,20 @@ def get_base_moves(game):
     that will put snake against the wall
     """
     head = game.me.head()
-    moves = []
-    neighbours = [{
+    moves = [{
         'd': head.up(),
-        'm': Move(UP, 0.01)
+        'm': Move(UP, 0.01) if game.is_against_wall(head.up()) else Move(UP, 0.005)
     }, {
         'd': head.down(),
-        'm': Move(DOWN, 0.01)
+        'm': Move(UP, 0.01) if game.is_against_wall(head.down()) else Move(DOWN, 0.005)
     }, {
         'd': head.left(),
-        'm': Move(LEFT, 0.01)
+        'm': Move(LEFT, 0.01) if game.is_against_wall(head.left()) else Move(LEFT, 0.005)
     }, {
         'd': head.right(),
-        'm': Move(RIGHT, 0.01)
+        'm': Move(RIGHT, 0.01) if game.is_against_wall(head.right()) else Move(RIGHT, 0.005)
     }]
-    for n in neighbours:
-        if game.is_against_wall(n['d']):
-            n['m'].goodness = 0.005
-            print('goodness: ', n['m'].goodness)
-            moves.append(n['m'])
-    return moves
+    return [move['m'] for move in moves]
 
 def unsafe_moves(game):
     """Return banned moves to neighbour positions (walls and other snakes)."""
