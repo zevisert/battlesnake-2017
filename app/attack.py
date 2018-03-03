@@ -14,7 +14,8 @@ def value(game, distance, snake):
     if snake.length() >= my_size:
         return 0
 
-    return 1 / (distance) + (0.01 * (my_size - snake.length()))
+    length_diff = my_size - snake.length()
+    return (1 / distance) + (0.01 * length_diff)
 
 
 def attack(game):

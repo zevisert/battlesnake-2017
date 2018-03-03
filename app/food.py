@@ -10,14 +10,16 @@ def value(game, distance):
     """
     health = game.me.health()
 
-    threshold = 25
+    threshold = 50
     avg_length = utils.average_length(snakes=game.snakes)
 
-    if health > threshold and game.me.length() > avg_length:
+    if health > threshold and game.me.length() >= avg_length:
         return 0
+    if health < 15:
+        return 5
 
     distance_weight = 1 / distance
-    health_weight = 1 / health
+    health_weight = (1 / health) * 1
     return distance_weight + health_weight
 
 

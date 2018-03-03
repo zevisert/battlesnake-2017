@@ -4,7 +4,9 @@ from move import Move
 
 def value(game, distance):
     """Return a value representing how much we want to move towards our butt."""
-    return 1 / distance
+    if distance == 0:
+        return 1
+    return 1 / (distance + 10)
 
 
 def chase(game):
