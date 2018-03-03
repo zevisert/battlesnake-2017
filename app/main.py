@@ -96,10 +96,15 @@ def remove_critical(moves, banned_moves):
     return filter(lambda d: d not in banned_moves, moves)
 
 
-def choose_best_move(moves):
-    """Choose the best move based on goodness."""
+def sort_moves(moves=[]):
     moves.sort()
     moves.reverse()
+    return moves
+
+
+def choose_best_move(moves=[]):
+    """Choose the best move based on goodness."""
+    moves = sort_moves(moves)
     if len(moves) <= 0:
         return None
     return moves[0]
@@ -235,6 +240,7 @@ def move():
     # print(move)
 
     moves = available if len(available) > 0 else better_moves
+    moves = sort_moves(moves)
     return {'move': move.direction, 'taunt': str(get_move_weights(moves[:3]))}
 
 
