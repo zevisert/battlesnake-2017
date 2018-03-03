@@ -29,7 +29,10 @@ class Game:
         """
         Return True if the coordinate is against the wall
         """
-        return coord.y == 0 or coord.y >= self.height-1 or coord.x == 0 or coord.x >= self.width-1
+        ret = coord.y == 0 or coord.y >= self.height-1 or coord.x == 0 or coord.x >= self.width-1
+        if ret:
+            print('Wall nearby!')
+        return ret
 
 
     def is_safe(self, coord):
@@ -71,7 +74,7 @@ class Game:
         if not self.me.will_grow():
             matrix[self.me.butt().y + 1][self.me.butt().x + 1] = 0
 
-        self.print_matrix(matrix)
+        # self.print_matrix(matrix)
 
         return matrix
 
