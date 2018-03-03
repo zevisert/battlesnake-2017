@@ -62,10 +62,18 @@ def flood_fill(game, coord):
     # Before the fill, move the opponent snake heads out one in each way
     for snake in game.other_snakes:
         board[snake.head().y + 1][snake.head().x + 1].cell_type = 'body'
-        board[snake.head().up().y   + 1][snake.head().x + 1].cell_type = 'head'
-        board[snake.head().down().y + 1][snake.head().x + 1].cell_type = 'head'
-        board[snake.head().y + 1][snake.head().left().x  + 1].cell_type = 'head'
-        board[snake.head().y + 1][snake.head().right().x + 1].cell_type = 'head'
+        
+        if board[snake.head().up().y + 1][snake.head().x + 1].cell_type == 'open':
+           board[snake.head().up().y + 1][snake.head().x + 1].cell_type = 'head'
+
+        if board[snake.head().down().y + 1][snake.head().x + 1].cell_type != 'open':
+           board[snake.head().down().y + 1][snake.head().x + 1].cell_type = 'head'
+
+        if board[snake.head().y + 1][snake.head().left().x + 1].cell_type == 'open':
+           board[snake.head().y + 1][snake.head().left().x + 1].cell_type = 'head'
+
+        if board[snake.head().y + 1][snake.head().right().x + 1].cell_type == 'open':
+           board[snake.head().y + 1][snake.head().right().x + 1].cell_type = 'head'
         
     print("start at {}, {}".format(coord.y + 1, coord.x + 1))
     for row in board:
