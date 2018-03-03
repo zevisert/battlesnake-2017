@@ -2,7 +2,6 @@ import utils
 from coord import Coord
 from snake import Snake
 
-
 class Game:
     """Represents the state of the game at one turn."""
 
@@ -48,6 +47,9 @@ class Game:
         """Return if a coordinate is not safe."""
         return not self.is_safe(coord)
 
+    def coord_type(self, c):
+        return self.board[c.y + 1][c.x + 1]
+
     def print_matrix(self, matrix):
         """Print a matrix."""
         for i in range(len(matrix)):
@@ -55,16 +57,16 @@ class Game:
 
     def create_board_matrix(self):
         """Create a matrix representation of the board."""
-        matrix = [[0 for x in range(self.width + 2)]
+        matrix = [[EMPTY for x in range(self.width + 2)]
                   for y in range(self.height + 2)]
 
         # Add walls on edges
         for i in range(len(matrix[0])):
             matrix[0][i] = 1
-            matrix[len(matrix) - 1][i] = 1
+            matrix[len(matrix) - 1][i] = WALL
         for i in range(len(matrix)):
             matrix[i][0] = 1
-            matrix[i][len(matrix[i]) - 1] = 1
+            matrix[i][len(matrix[i]) - 1] = WALL
 
         # Add snakes bodies as a different type
         for c in self.snake_coords:

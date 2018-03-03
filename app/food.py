@@ -1,3 +1,4 @@
+import params
 import utils
 from move import Move
 from params import FOOD_THRESHOLD, HEALTH_WEIGHT_MULTIPLIER
@@ -11,16 +12,16 @@ def value(game, distance):
     """
     health = game.me.health()
 
-    threshold = FOOD_THRESHOLD
     avg_length = utils.average_length(snakes=game.snakes)
 
-    if health < distance:
-        return 10
-    if health > threshold and game.me.length() >= avg_length:
+    if health > params.FOOD_THRESH and game.me.length() >= avg_length:
         return 0
+    if health < distance:
+        return 100
 
     distance_weight = 1 / distance
-    health_weight = ((health/100.0)**-1) * HEALTH_WEIGHT_MULTIPLIER
+    health_weight = (100 / health) * HEALTH_WEIGHT_MULTIPLIER
+
     return distance_weight + health_weight
 
 

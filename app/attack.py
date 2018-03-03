@@ -1,3 +1,4 @@
+import params
 import utils
 from params import ATTACK_WEIGHT_MULTIPLIER
 from move import Move
@@ -13,7 +14,8 @@ def value(game, distance, snake):
     """
     my_size = game.me.length()
 
-    if snake.length() >= my_size:
+    if (snake.length() >= my_size) or (distance >
+                                       params.ATTACK_DISTANCE_THRESH):
         return 0
 
     length_diff = my_size - snake.length()
