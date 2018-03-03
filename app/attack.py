@@ -1,5 +1,5 @@
 import utils
-from app.params import ATTACK_WEIGHT_MULTIPLIER
+from params import ATTACK_WEIGHT_MULTIPLIER
 from move import Move
 
 
