@@ -71,7 +71,7 @@ class Game:
         if not self.me.will_grow():
             matrix[self.me.butt().y + 1][self.me.butt().x + 1] = 0
 
-        # self.print_matrix(matrix)
+        self.print_matrix(matrix)
 
         return matrix
 
