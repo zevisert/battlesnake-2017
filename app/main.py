@@ -3,6 +3,7 @@ import random
 
 import bottle
 import utils
+from app.params import WALL_PENALTY_MULTIPLIER
 from attack import attack
 from chase import chase
 from coord import DOWN, LEFT, RIGHT, UP
@@ -174,6 +175,17 @@ def get_move_weights(moves):
     return {key(m, idx): val(m) for idx, m in enumerate(moves)}
 
 
+def penalize_wall_moves(good_moves, game):
+    # Decrease the goodness of a move if it
+    # will put the snake against a wall
+    for move in good_moves:
+        direction = utils.dir_str_to_direction(move.direction)
+        if game.is_against_wall(direction):
+            print 'penalizing %s' % move.direction
+            move.goodness *= WALL_PENALTY_MULTIPLIER
+    return good_moves
+
+
 @bottle.post('/move')
 def move():
     """Make a move."""
@@ -205,6 +217,9 @@ def move():
     attack_moves = attack(game)
     chase_moves = chase(game)
     good = utils.flatten([chase_moves, food_moves, attack_moves, directions])
+
+    # decrease the goodness if the move goes near a wall
+    good = penalize_wall_moves(good, game)
 
     # print('\n--- good')
     # for c in good:
