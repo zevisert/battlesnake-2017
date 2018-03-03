@@ -1,12 +1,13 @@
+import params
 import utils
-from .move import Move
+from move import Move
 
 
 def value(game, distance):
     """Return a value representing how much we want to move towards our butt."""
-    if distance == 0:
-        return 1
-    return 1 / (distance + 10)
+    if distance <= 1:
+        return params.CHASE_ONE_VALUE
+    return (1 / distance) * params.CHASE_MULTI
 
 
 def chase(game):
@@ -18,7 +19,7 @@ def chase(game):
     if val <= 0:
         return []
 
-    for m in game.me.moves_to(game.me.butt()):
+    for m in game.me.path_to(game, game.me.butt()):
         moves.append(Move(m, val, 'chase'))
 
     return moves

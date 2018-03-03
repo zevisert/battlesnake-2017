@@ -1,4 +1,4 @@
-from .move import Move
+from move import Move
 import utils
 
 

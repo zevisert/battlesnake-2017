@@ -1,4 +1,5 @@
-from .coord import DOWN, LEFT, RIGHT, UP, Coord
+from coord import DOWN, LEFT, RIGHT, UP, Coord
+from pathing import find_path
 
 
 class Snake:
@@ -35,6 +36,17 @@ class Snake:
         """Returns if the snake will grow next turn."""
         return (len(self.coords) != len(set(
             self.coords))) or (self.health() == 100)
+
+    def path_to(self, game, destination):
+        p = find_path(game, self.head(), destination)
+        # print('\nhead {}'.format(self.head()))
+        # print('path too')
+        # for c in p:
+        #     print(c)
+
+        if len(p) <= 0:
+            return []
+        return self.moves_to(p[0])
 
     def moves_to(self, destination):
         """Return possible moves towards a destination."""

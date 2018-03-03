@@ -1,7 +1,6 @@
+import params
 import utils
-from params import ATTACK_WEIGHT_MULTIPLIER
 from move import Move
-
 
 
 def value(game, distance, snake):
@@ -13,11 +12,12 @@ def value(game, distance, snake):
     """
     my_size = game.me.length()
 
-    if snake.length() >= my_size:
+    if (snake.length() >= my_size) or (distance >
+                                       params.ATTACK_DISTANCE_THRESH):
         return 0
 
     length_diff = my_size - snake.length()
-    return (1 / distance) + (ATTACK_WEIGHT_MULTIPLIER * length_diff)
+    return (1 / distance) + (params.ATTACK_LENGTH_MULTI * length_diff)
 
 
 def attack(game):
@@ -34,7 +34,7 @@ def attack(game):
 
     for idx, d in enumerate(head_distances):
         # Find possible moves towards the snake heads
-        mt = game.me.moves_to(head_coords[idx])
+        mt = game.me.path_to(game, head_coords[idx])
 
         for m in mt:
             val = value(game, d, game.snakes[idx])
