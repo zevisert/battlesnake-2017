@@ -62,6 +62,7 @@ def get_base_moves(game):
         if game.is_against_wall(n['d']):
             n['m'].goodness -= 0.005
             moves.append(n['m'])
+    return moves
 
 def unsafe_moves(game):
     """Return banned moves to neighbour positions (walls and other snakes)."""
