@@ -27,6 +27,15 @@ class Snake:
         """Return the length of the snake."""
         return len(self.coords)
 
+    def health(self):
+        """Return the health of the snake."""
+        return self.health_points
+
+    def will_grow(self):
+        """Returns if the snake will grow next turn."""
+        return (len(self.coords) != len(set(
+            self.coords))) or (self.health() == 100)
+
     def moves_to(self, destination):
         """Return possible moves towards a destination."""
         head = self.head()

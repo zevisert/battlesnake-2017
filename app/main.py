@@ -3,8 +3,11 @@ import random
 
 import bottle
 import utils
+from attack import attack
+from chase import chase
 from coord import DOWN, LEFT, RIGHT, UP
 from crashing import crashing_moves
+from food import food
 from game import Game
 from move import Move
 from wayout import way_out
@@ -62,109 +65,6 @@ def unsafe_moves(game):
             banned_moves.append(n['m'])
 
     return banned_moves
-
-
-def food(game):
-    """Return good moves towards food, goodness is determined by the weighted value function."""
-    moves = []
-
-    snake_length_ratio = utils.average_length(
-        snakes=game.snakes) / game.me.length()
-
-    closest_foods = []
-    # Only consider food we are the closest snake too
-    for f in game.foods:
-        min_dist = game.width * game.height
-        for s in game.other_snakes:
-            if s.head().distance(f) < min_dist:
-                min_dist = s.head().distance(f)
-
-        if game.me.head().distance(f) <= min_dist:
-            closest_foods.append(f)
-
-    if len(closest_foods) <= 0:
-        closest_foods = game.foods
-
-    def weighted_value(distance, health):
-        distance_weight = 1 / (distance * 0.5)
-        health_weight = 1 / (health + 0.01)
-        length_compare_weight = 1 if snake_length_ratio > 1 else 0
-
-        if health < 35:
-            health_weight += 0.20 * (70 - health)
-
-        # Return a value between 0 and 1
-        return (distance_weight + health_weight + length_compare_weight) / 3
-
-    if len(closest_foods) <= 0:
-        return moves
-
-    # Get a list of distances to all foods
-    food_distances = map(lambda c: game.me.head().distance(c), closest_foods)
-
-    health = game.me.health_points
-
-    for idx, d in enumerate(food_distances):
-        # Find possible moves towards the foods
-        #   i.e. if food is to the top right, possible moves are up and right
-        mt = game.me.moves_to(closest_foods[idx])
-        for m in mt:
-            # Add possible move to possible moves with goodness from weighted values
-            moves.append(Move(m, weighted_value(d, health), 'food'))
-
-    return moves
-
-
-def attack(game):
-    """Return good moves towards attack, goodness determined by the weighted value function."""
-    moves = []
-    my_size = game.me.length()
-
-    def weighted_value(distance, snake_index):
-        other_snake = game.snakes[snake_index]
-
-        if other_snake.length() >= my_size:
-            return 0
-
-        return 1 / (distance) + (0.01 * (my_size - other_snake.length()))
-
-    if len(game.snakes) <= 0:
-        return moves
-
-    # Get a list of distances to all snake heads
-    head_coords = [snake.head() for snake in game.snakes]
-    head_distances = map(lambda h: game.me.head().distance(h), head_coords)
-
-    for idx, d in enumerate(head_distances):
-        # Find possible moves towards the snake heads
-        mt = game.me.moves_to(head_coords[idx])
-
-        for m in mt:
-            val = weighted_value(d, idx)
-
-            if val:
-                # Add possible move to possible moves with goodness from weighted values
-                moves.append(Move(m, val, 'attack'))
-
-    return moves
-
-
-def chase_tail(game):
-    """Returns good moves towards tail, goodness determined by how far away it is."""
-    moves = []
-    butt = game.me.butt()
-
-    if game.me.length() < 4:
-        return []
-
-    val = 0
-    if game.me.head().distance(butt) <= 1:
-        val = 1
-
-    for m in game.me.moves_to(butt):
-        moves.append(Move(m, val, 'chase'))
-
-    return moves
 
 
 def remove_critical(moves, banned_moves):
@@ -276,8 +176,8 @@ def move():
     # Good positions
     food_moves = food(game)
     attack_moves = attack(game)
-    chase_moves = chase_tail(game)
-    good = utils.flatten([food_moves, attack_moves, directions])
+    chase_moves = chase(game)
+    good = utils.flatten([chase_moves, food_moves, attack_moves, directions])
 
     # print('\n--- good')
     # for c in good:
