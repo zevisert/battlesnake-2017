@@ -1,5 +1,5 @@
 import utils
-from move import Move
+from .move import Move
 
 
 def value(game, distance):

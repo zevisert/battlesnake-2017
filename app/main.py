@@ -3,14 +3,14 @@ import random
 
 import bottle
 import utils
-from attack import attack
-from chase import chase
-from coord import DOWN, LEFT, RIGHT, UP
-from crashing import crashing_moves
-from food import food
-from game import Game
-from move import Move
-from wayout import way_out
+from .attack import attack
+from .chase import chase
+from .coord import DOWN, LEFT, RIGHT, UP
+from .crashing import crashing_moves
+from .food import food
+from .game import Game
+from .move import Move
+from .wayout import way_out
 
 
 @bottle.route('/static/<path:path>')

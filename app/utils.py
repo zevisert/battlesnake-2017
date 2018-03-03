@@ -1,6 +1,6 @@
 import Queue
 
-from coord import Coord
+from .coord import Coord
 
 
 def flatten(l):
@@ -98,6 +98,7 @@ def flood_fill(game, coord):
             # Keep track of total found space
             space += 1
 
+            # There's enough space to move there
             if space > 2 * game.me.length():
                 return space
 
