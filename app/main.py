@@ -38,6 +38,30 @@ def start():
         'tail_type': 'freckled'
     }
 
+def get_base_moves(game):
+    """
+    Return moves in all four directions, disfavoring those
+    that will put snake against the wall
+    """
+    head = game.me.head()
+    moves = []
+    neighbours = [{
+        'd': head.up(),
+        'm': Move(UP, 0.01, 'unsafe')
+    }, {
+        'd': head.down(),
+        'm': Move(DOWN, 0.01, 'unsafe')
+    }, {
+        'd': head.left(),
+        'm': Move(LEFT, 0.01, 'unsafe')
+    }, {
+        'd': head.right(),
+        'm': Move(RIGHT, 0.01, 'unsafe')
+    }]
+    for n in neighbours:
+        if game.is_against_wall(n['d']):
+            n['m'].goodness -= 0.005
+            moves.append(n['m'])
 
 def unsafe_moves(game):
     """Return banned moves to neighbour positions (walls and other snakes)."""
@@ -150,12 +174,7 @@ def move():
     game = Game(data)
 
     # Possible directions we can move
-    directions = [
-        Move(UP, 0.01, 'default'),
-        Move(DOWN, 0.01, 'default'),
-        Move(LEFT, 0.01, 'default'),
-        Move(RIGHT, 0.01, 'default')
-    ]
+    directions = get_base_moves(game)
 
     # Critcal positions
     not_safe = unsafe_moves(game)

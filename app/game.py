@@ -25,6 +25,13 @@ class Game:
         """Return if coordinate is wall or not."""
         return coord.y < 0 or coord.y >= self.height or coord.x < 0 or coord.x >= self.width
 
+    def is_against_wall(self, coord):
+        """
+        Return True if the coordinate is against the wall
+        """
+        return coord.y == 0 or coord.y >= self.height-1 or coord.x == 0 or coord.x >= self.width-1
+
+
     def is_safe(self, coord):
         """Return if a coordinate is safe or not."""
         if self.is_wall(coord):
