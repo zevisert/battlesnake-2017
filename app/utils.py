@@ -123,7 +123,7 @@ def flood_fill(game, coord):
 
             # 12. If the cell to the south of this is unvisited, add that cell to Q.
             y = clamp(point.down().y, 0, game.height)
-            if not board[y][x].visited and board[y][x].cell_type != 'open':
+            if not board[y][x].visited and board[y][x].cell_type == 'open':
                 Q.put(board[y][x])
 
             # 13. Continue looping until Q is exhausted or there's enough space
