@@ -68,7 +68,7 @@ class Game:
 
         # Mark our butt if we are not going to grow
         if not self.me.will_grow():
-            matrix[self.me.head().y][self.me.head().x] = 0
+            matrix[self.me.butt().y + 1][self.me.butt().x + 1] = 0
 
         # self.print_matrix(matrix)
 
