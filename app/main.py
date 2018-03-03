@@ -34,7 +34,7 @@ def start():
         'color': '#F2A30F',
         'taunt': 'ha',
         'head_url': head_url,
-        'name': 'SOHCAHTOA,
+        'name': 'SOHCAHTOA',
         'head_type': 'fang',
         'tail_type': 'block-bum'
     }
