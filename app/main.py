@@ -169,7 +169,7 @@ def get_move_weights(moves):
     """
     Given a list of moves, print their type and goodness
     """
-    key = lambda m, idx: '%s-%s' % (m.taunt, idx)
+    key = lambda m, idx: '%s-%.2f' % (m.taunt or 'default', idx)
     return {key(m, idx): m.goodness for idx, m in enumerate(moves)}
 
 
@@ -234,7 +234,7 @@ def move():
     # print(move)
 
     moves = available if len(available) > 0 else better_moves
-    return {'move': move.direction, 'taunt': str(get_move_weights(moves[:2]))}
+    return {'move': move.direction, 'taunt': str(get_move_weights(moves[:3]))}
 
 
 # Expose WSGI app (so gunicorn can find it)
