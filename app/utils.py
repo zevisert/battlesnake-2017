@@ -59,7 +59,9 @@ def flood_fill(game, coord):
 
     board = markup(game.board)
 
-    print(board)
+    for row in board:
+        print(*row)
+
     print("start at {}, {}".format(coord.y + 1, coord.x + 1))
 
     # 3. Set Q to the empty queue.
