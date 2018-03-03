@@ -1,4 +1,5 @@
 import utils
+from app.params import ATTACK_WEIGHT_MULTIPLIER
 from move import Move
 
 
@@ -15,7 +16,7 @@ def value(game, distance, snake):
         return 0
 
     length_diff = my_size - snake.length()
-    return (1 / distance) + (0.01 * length_diff)
+    return (1 / distance) + (ATTACK_WEIGHT_MULTIPLIER * length_diff)
 
 
 def attack(game):
