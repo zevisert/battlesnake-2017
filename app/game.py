@@ -56,9 +56,14 @@ class Game:
             matrix[i][0] = 1
             matrix[i][len(matrix[i]) - 1] = 1
 
-        # Add walls for other snakes and our tail
+        # Add snakes bodies as a different type
         for c in self.snake_coords:
-            matrix[c.y + 1][c.x + 1] = 1
+            matrix[c.y + 1][c.x + 1] = 2
+
+        # Add snake heads as another type
+        for s in self.other_snakes:
+            matrix[s.head.y + 1][s.head.x + 1] = 3
+
 
         # Mark our butt if we are not going to grow
         if not self.me.will_grow():
