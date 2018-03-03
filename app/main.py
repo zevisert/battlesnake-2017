@@ -5,7 +5,6 @@ import random
 
 import bottle
 import utils
-from params import WALL_PENALTY_MULTIPLIER
 from attack import attack
 from chase import chase
 from coord import DOWN, LEFT, RIGHT, UP
@@ -13,6 +12,7 @@ from crashing import crashing_moves
 from food import food
 from game import Game
 from move import Move
+from params import WALL_PENALTY_MULTIPLIER
 from wayout import way_out
 
 
@@ -30,16 +30,17 @@ def start():
     board_width = data['width']
     board_height = data['height']
 
-    head_url = 'https://ih0.redbubble.net/image.280444667.5089/flat,800x800,075,f.jpg'
+    head_url = 'https://cdn.shopify.com/s/files/1/1061/1924/products/Heart_Eyes_Emoji_2.png?v=1485573458'
 
     return {
-        'color': '#E8FDF5',
+        'color': '#4d3ae2',
         'taunt': 'ha',
         'head_url': head_url,
-        'name': '💅',
+        'name': '😍',
         'head_type': 'fang',
         'tail_type': 'block-bum'
     }
+
 
 def get_base_moves(game):
     """
@@ -48,19 +49,31 @@ def get_base_moves(game):
     """
     head = game.me.head()
     moves = [{
-        'd': head.up(),
-        'm': Move(UP, 0.01) if game.is_against_wall(head.up()) else Move(UP, 0.005)
+        'd':
+        head.up(),
+        'm':
+        Move(UP, 0.01) if game.is_against_wall(head.up()) else Move(UP, 0.005)
     }, {
-        'd': head.down(),
-        'm': Move(UP, 0.01) if game.is_against_wall(head.down()) else Move(DOWN, 0.005)
+        'd':
+        head.down(),
+        'm':
+        Move(UP, 0.01)
+        if game.is_against_wall(head.down()) else Move(DOWN, 0.005)
     }, {
-        'd': head.left(),
-        'm': Move(LEFT, 0.01) if game.is_against_wall(head.left()) else Move(LEFT, 0.005)
+        'd':
+        head.left(),
+        'm':
+        Move(LEFT, 0.01)
+        if game.is_against_wall(head.left()) else Move(LEFT, 0.005)
     }, {
-        'd': head.right(),
-        'm': Move(RIGHT, 0.01) if game.is_against_wall(head.right()) else Move(RIGHT, 0.005)
+        'd':
+        head.right(),
+        'm':
+        Move(RIGHT, 0.01)
+        if game.is_against_wall(head.right()) else Move(RIGHT, 0.005)
     }]
     return [move['m'] for move in moves]
+
 
 def unsafe_moves(game):
     """Return banned moves to neighbour positions (walls and other snakes)."""
@@ -168,6 +181,7 @@ def get_largest_area(game):
 
     return max_move
 
+
 def get_move_weights(moves):
     """
     Given a list of moves, print their type and goodness
@@ -183,7 +197,6 @@ def penalize_wall_moves(good_moves, game):
     for move in good_moves:
         direction = utils.dir_str_to_direction(move.direction, game)
         if game.is_against_wall(direction):
-            print 'penalizing %s' % move.direction
             move.goodness *= WALL_PENALTY_MULTIPLIER
     return good_moves
 

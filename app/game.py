@@ -2,6 +2,7 @@ import utils
 from coord import Coord
 from snake import Snake
 
+
 class Game:
     """Represents the state of the game at one turn."""
 
@@ -28,11 +29,8 @@ class Game:
         """
         Return True if the coordinate is against the wall
         """
-        ret = coord.y == 0 or coord.y >= self.height-1 or coord.x == 0 or coord.x >= self.width-1
-        if ret:
-            print('Wall nearby!')
+        ret = coord.y == 0 or coord.y >= self.height - 1 or coord.x == 0 or coord.x >= self.width - 1
         return ret
-
 
     def is_safe(self, coord):
         """Return if a coordinate is safe or not."""
@@ -57,16 +55,16 @@ class Game:
 
     def create_board_matrix(self):
         """Create a matrix representation of the board."""
-        matrix = [[EMPTY for x in range(self.width + 2)]
+        matrix = [[0 for x in range(self.width + 2)]
                   for y in range(self.height + 2)]
 
         # Add walls on edges
         for i in range(len(matrix[0])):
             matrix[0][i] = 1
-            matrix[len(matrix) - 1][i] = WALL
+            matrix[len(matrix) - 1][i] = 1
         for i in range(len(matrix)):
             matrix[i][0] = 1
-            matrix[i][len(matrix[i]) - 1] = WALL
+            matrix[i][len(matrix[i]) - 1] = 1
 
         # Add snakes bodies as a different type
         for c in self.snake_coords:
@@ -76,7 +74,6 @@ class Game:
         matrix[self.me.head().y + 1][self.me.head().x + 1] = 3
         for s in self.other_snakes:
             matrix[s.head().y + 1][s.head().x + 1] = 3
-
 
         # Mark our butt if we are not going to grow
         if not self.me.will_grow():

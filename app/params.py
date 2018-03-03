@@ -1,3 +1,4 @@
+# Walls
 WALL_PENALTY_MULTIPLIER = 0.5
 
 # Food

@@ -1,7 +1,6 @@
 import params
 import utils
 from move import Move
-from params import FOOD_THRESHOLD, HEALTH_WEIGHT_MULTIPLIER
 
 
 def value(game, distance):
@@ -20,7 +19,7 @@ def value(game, distance):
         return 100
 
     distance_weight = 1 / distance
-    health_weight = (100 / health) * HEALTH_WEIGHT_MULTIPLIER
+    health_weight = (100 / health) * params.FOOD_HEALTH_MULTI
 
     return distance_weight + health_weight
 
