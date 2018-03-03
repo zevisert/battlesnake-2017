@@ -3,14 +3,15 @@ import random
 
 import bottle
 import utils
-from .attack import attack
-from .chase import chase
-from .coord import DOWN, LEFT, RIGHT, UP
-from .crashing import crashing_moves
-from .food import food
-from .game import Game
-from .move import Move
-from .wayout import way_out
+from params import WALL_PENALTY_MULTIPLIER
+from attack import attack
+from chase import chase
+from coord import DOWN, LEFT, RIGHT, UP
+from crashing import crashing_moves
+from food import food
+from game import Game
+from move import Move
+from wayout import way_out
 
 
 @bottle.route('/static/<path:path>')
@@ -27,11 +28,10 @@ def start():
     board_width = data['width']
     board_height = data['height']
 
-    head_url = '%s://%s/static/head.png' % (bottle.request.urlparts.scheme,
-                                            bottle.request.urlparts.netloc)
+    head_url = 'https://ih0.redbubble.net/image.280444667.5089/flat,800x800,075,f.jpg'
 
     return {
-        'color': '#F2A30F',
+        'color': '#E8FDF5',
         'taunt': 'ha',
         'head_url': head_url,
         'name': 'SOHCAHTOA',
@@ -39,6 +39,26 @@ def start():
         'tail_type': 'block-bum'
     }
 
+def get_base_moves(game):
+    """
+    Return moves in all four directions, disfavoring those
+    that will put snake against the wall
+    """
+    head = game.me.head()
+    moves = [{
+        'd': head.up(),
+        'm': Move(UP, 0.01) if game.is_against_wall(head.up()) else Move(UP, 0.005)
+    }, {
+        'd': head.down(),
+        'm': Move(UP, 0.01) if game.is_against_wall(head.down()) else Move(DOWN, 0.005)
+    }, {
+        'd': head.left(),
+        'm': Move(LEFT, 0.01) if game.is_against_wall(head.left()) else Move(LEFT, 0.005)
+    }, {
+        'd': head.right(),
+        'm': Move(RIGHT, 0.01) if game.is_against_wall(head.right()) else Move(RIGHT, 0.005)
+    }]
+    return [move['m'] for move in moves]
 
 def unsafe_moves(game):
     """Return banned moves to neighbour positions (walls and other snakes)."""
@@ -72,10 +92,15 @@ def remove_critical(moves, banned_moves):
     return filter(lambda d: d not in banned_moves, moves)
 
 
-def choose_best_move(moves):
-    """Choose the best move based on goodness."""
+def sort_moves(moves=[]):
     moves.sort()
     moves.reverse()
+    return moves
+
+
+def choose_best_move(moves=[]):
+    """Choose the best move based on goodness."""
+    moves = sort_moves(moves)
     if len(moves) <= 0:
         return None
     return moves[0]
@@ -141,6 +166,25 @@ def get_largest_area(game):
 
     return max_move
 
+def get_move_weights(moves):
+    """
+    Given a list of moves, print their type and goodness
+    """
+    key = lambda m, idx: '%s-%s' % (m.taunt or 'default', m.direction)
+    val = lambda m: '%.2f' % m.goodness
+    return {key(m, idx): val(m) for idx, m in enumerate(moves)}
+
+
+def penalize_wall_moves(good_moves, game):
+    # Decrease the goodness of a move if it
+    # will put the snake against a wall
+    for move in good_moves:
+        direction = utils.dir_str_to_direction(move.direction, game)
+        if game.is_against_wall(direction):
+            print 'penalizing %s' % move.direction
+            move.goodness *= WALL_PENALTY_MULTIPLIER
+    return good_moves
+
 
 @bottle.post('/move')
 def move():
@@ -151,12 +195,7 @@ def move():
     game = Game(data)
 
     # Possible directions we can move
-    directions = [
-        Move(UP, 0.01, 'default'),
-        Move(DOWN, 0.01, 'default'),
-        Move(LEFT, 0.01, 'default'),
-        Move(RIGHT, 0.01, 'default')
-    ]
+    directions = get_base_moves(game)
 
     # Critcal positions
     not_safe = unsafe_moves(game)
@@ -178,6 +217,9 @@ def move():
     attack_moves = attack(game)
     chase_moves = chase(game)
     good = utils.flatten([chase_moves, food_moves, attack_moves, directions])
+
+    # decrease the goodness if the move goes near a wall
+    good = penalize_wall_moves(good, game)
 
     # print('\n--- good')
     # for c in good:
@@ -207,7 +249,9 @@ def move():
     # print('\n--- move')
     # print(move)
 
-    return {'move': move.direction, 'taunt': move.taunt}
+    moves = available if len(available) > 0 else better_moves
+    moves = sort_moves(moves)
+    return {'move': move.direction, 'taunt': str(get_move_weights(moves[:3]))}
 
 
 # Expose WSGI app (so gunicorn can find it)

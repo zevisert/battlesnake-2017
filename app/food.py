@@ -1,25 +1,26 @@
 import utils
-from .move import Move
+from move import Move
+from params import FOOD_THRESHOLD, HEALTH_WEIGHT_MULTIPLIER
 
 
 def value(game, distance):
     """Return a value representing how much we want to move towards the food.
 
     game: Game object
-    distance: Euclidean distance to food
+    distance: manhattan distance to food
     """
     health = game.me.health()
 
-    threshold = 50
+    threshold = FOOD_THRESHOLD
     avg_length = utils.average_length(snakes=game.snakes)
 
+    if health < distance:
+        return 10
     if health > threshold and game.me.length() >= avg_length:
         return 0
-    if health < 15:
-        return 5
 
     distance_weight = 1 / distance
-    health_weight = (1 / health) * 1
+    health_weight = ((health/100.0)**-1) * HEALTH_WEIGHT_MULTIPLIER
     return distance_weight + health_weight
 
 

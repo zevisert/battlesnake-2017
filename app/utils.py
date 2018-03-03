@@ -1,6 +1,6 @@
 import Queue
 
-from .coord import Coord
+from coord import Coord, UP, DOWN, LEFT, RIGHT
 
 
 def flatten(l):
@@ -135,3 +135,15 @@ def flood_fill(game, coord):
 
     return space
 
+
+def dir_str_to_direction(d_str, game):
+    head = game.me.head()
+
+    if d_str == UP:
+        return head.up()
+    if d_str == DOWN:
+        return head.down()
+    if d_str == LEFT:
+        return head.left()
+    if d_str == RIGHT:
+        return head.right()
