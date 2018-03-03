@@ -73,10 +73,6 @@ def flood_fill(game, coord):
 
         if board[snake.head().y + 1][snake.head().right().x + 1].cell_type == 'open':
            board[snake.head().y + 1][snake.head().right().x + 1].cell_type = 'wall'
-        
-    print("start at {}, {}".format(coord.y + 1, coord.x + 1))
-    for row in board:
-        print(row)
 
     # 3. Set Q to the empty queue.
     Q = Queue.Queue()
