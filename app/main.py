@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import os
 import random
 
@@ -34,7 +36,7 @@ def start():
         'color': '#E8FDF5',
         'taunt': 'ha',
         'head_url': head_url,
-        'name': 'SOHCAHTOA',
+        'name': '💅',
         'head_type': 'fang',
         'tail_type': 'block-bum'
     }
