@@ -60,6 +60,7 @@ def flood_fill(game, coord):
     board = markup(game.board)
 
     print(board)
+    print("start at {}, {}".format(coord.y + 1, coord.x + 1))
 
     # 3. Set Q to the empty queue.
     Q = Queue.Queue()
@@ -67,7 +68,7 @@ def flood_fill(game, coord):
     # 4. Add node to Q.
     start = board[coord.y + 1][coord.x + 1]
     start.visited = True
-    start.type = 1
+    start.type = 2 # Our head goes there
     Q.put(start)
 
     # 5. For each element N of Q:
