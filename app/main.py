@@ -179,7 +179,7 @@ def penalize_wall_moves(good_moves, game):
     # Decrease the goodness of a move if it
     # will put the snake against a wall
     for move in good_moves:
-        direction = utils.dir_str_to_direction(move.direction)
+        direction = utils.dir_str_to_direction(move.direction, game)
         if game.is_against_wall(direction):
             print 'penalizing %s' % move.direction
             move.goodness *= WALL_PENALTY_MULTIPLIER
