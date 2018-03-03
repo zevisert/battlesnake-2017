@@ -3,7 +3,7 @@ import random
 
 import bottle
 import utils
-from app.params import WALL_PENALTY_MULTIPLIER
+from params import WALL_PENALTY_MULTIPLIER
 from attack import attack
 from chase import chase
 from coord import DOWN, LEFT, RIGHT, UP
