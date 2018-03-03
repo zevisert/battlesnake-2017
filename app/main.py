@@ -165,6 +165,13 @@ def get_largest_area(game):
 
     return max_move
 
+def get_move_weights(moves):
+    """
+    Given a list of moves, print their type and goodness
+    """
+    key = lambda m, idx: '%s-%s' % (m.taunt, idx)
+    return {key(m, idx): m.goodness for idx, m in enumerate(moves)}
+
 
 @bottle.post('/move')
 def move():
@@ -226,7 +233,8 @@ def move():
     # print('\n--- move')
     # print(move)
 
-    return {'move': move.direction, 'taunt': move.taunt}
+    moves = available if len(available) > 0 else better_moves
+    return {'move': move.direction, 'taunt': get_move_weights(moves)}
 
 
 # Expose WSGI app (so gunicorn can find it)
