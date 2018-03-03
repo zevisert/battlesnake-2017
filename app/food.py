@@ -1,13 +1,14 @@
 import params
 import utils
 from move import Move
+from params import FOOD_THRESHOLD, HEALTH_WEIGHT_MULTIPLIER
 
 
 def value(game, distance):
     """Return a value representing how much we want to move towards the food.
 
     game: Game object
-    distance: Euclidean distance to food
+    distance: manhattan distance to food
     """
     health = game.me.health()
 
@@ -19,7 +20,8 @@ def value(game, distance):
         return 100
 
     distance_weight = 1 / distance
-    health_weight = (100 / health) * params.FOOD_HEALTH_MULTI
+    health_weight = (100 / health) * HEALTH_WEIGHT_MULTIPLIER
+
     return distance_weight + health_weight
 
 
