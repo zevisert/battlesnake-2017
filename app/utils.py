@@ -65,7 +65,7 @@ def flood_fill(game, coord):
         if board[snake.head().up().y + 1][snake.head().x + 1].cell_type == 'open':
            board[snake.head().up().y + 1][snake.head().x + 1].cell_type = 'wall'
 
-        if board[snake.head().down().y + 1][snake.head().x + 1].cell_type != 'open':
+        if board[snake.head().down().y + 1][snake.head().x + 1].cell_type == 'open':
            board[snake.head().down().y + 1][snake.head().x + 1].cell_type = 'wall'
 
         if board[snake.head().y + 1][snake.head().left().x + 1].cell_type == 'open':
