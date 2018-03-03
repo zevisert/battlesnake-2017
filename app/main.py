@@ -127,7 +127,7 @@ def get_largest_area(game):
     }]
 
     max_area = -1
-    max_move = neighbours[0]
+    max_move = neighbours[0]['m']
     for n in neighbours:
         if game.is_unsafe(n['d']):
             continue
