@@ -1,4 +1,4 @@
-from .coord import DOWN, LEFT, RIGHT, UP, Coord
+from coord import DOWN, LEFT, RIGHT, UP, Coord
 
 
 class Snake:

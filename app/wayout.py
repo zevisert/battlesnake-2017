@@ -1,5 +1,5 @@
-from .coord import UP, DOWN, LEFT, RIGHT
-from .move import Move
+from coord import UP, DOWN, LEFT, RIGHT
+from move import Move
 
 
 def way_out(game):
