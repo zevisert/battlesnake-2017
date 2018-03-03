@@ -1,6 +1,6 @@
 import utils
-from .coord import Coord
-from .snake import Snake
+from coord import Coord
+from snake import Snake
 
 
 class Game:
