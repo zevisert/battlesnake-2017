@@ -34,9 +34,9 @@ def start():
         'color': '#E8FDF5',
         'taunt': 'ha',
         'head_url': head_url,
-        'name': 'notice me pls',
-        'head_type': 'safe',
-        'tail_type': 'freckled'
+        'name': 'SOHCAHTOA',
+        'head_type': 'fang',
+        'tail_type': 'block-bum'
     }
 
 def get_base_moves(game):

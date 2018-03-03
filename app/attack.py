@@ -3,6 +3,7 @@ from params import ATTACK_WEIGHT_MULTIPLIER
 from move import Move
 
 
+
 def value(game, distance, snake):
     """Return a value representing how much we want to move towards the other snake.
 
