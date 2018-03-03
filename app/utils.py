@@ -68,6 +68,8 @@ def flood_fill(game, coord):
         board[snake.head().y + 1][snake.head().right().x + 1].cell_type = 'head'
         
     print("start at {}, {}".format(coord.y + 1, coord.x + 1))
+    for row in board:
+        print(row)
 
     # 3. Set Q to the empty queue.
     Q = Queue.Queue()
@@ -127,9 +129,6 @@ def flood_fill(game, coord):
                 Q.put(board[y][x])
 
             # 13. Continue looping until Q is exhausted or there's enough space
-
-    for row in board:
-        print(row)
 
     return space
 
