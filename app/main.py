@@ -27,11 +27,10 @@ def start():
     board_width = data['width']
     board_height = data['height']
 
-    head_url = '%s://%s/static/head.png' % (bottle.request.urlparts.scheme,
-                                            bottle.request.urlparts.netloc)
+    head_url = 'https://ih0.redbubble.net/image.280444667.5089/flat,800x800,075,f.jpg'
 
     return {
-        'color': '#4d3ae2',
+        'color': '#E8FDF5',
         'taunt': 'ha',
         'head_url': head_url,
         'name': 'notice me pls',
