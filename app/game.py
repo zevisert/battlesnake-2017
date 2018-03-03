@@ -61,6 +61,7 @@ class Game:
             matrix[c.y + 1][c.x + 1] = 2
 
         # Add snake heads as another type
+        matrix[self.me.head().y + 1][self.me.head().x + 1] = 3
         for s in self.other_snakes:
             matrix[s.head().y + 1][s.head().x + 1] = 3
 
