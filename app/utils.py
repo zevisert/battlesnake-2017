@@ -60,7 +60,7 @@ def flood_fill(game, coord):
     board = markup(game.board)
 
     for row in board:
-        print(*row)
+        print(row)
 
     print("start at {}, {}".format(coord.y + 1, coord.x + 1))
 
