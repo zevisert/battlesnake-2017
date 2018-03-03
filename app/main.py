@@ -169,8 +169,9 @@ def get_move_weights(moves):
     """
     Given a list of moves, print their type and goodness
     """
-    key = lambda m, idx: '%s-%.2f' % (m.taunt or 'default', idx)
-    return {key(m, idx): m.goodness for idx, m in enumerate(moves)}
+    key = lambda m, idx: '%s-%s' % (m.taunt or 'default', m.direction)
+    val = lambda m: '%.2f' % m.goodness
+    return {key(m, idx): val(m) for idx, m in enumerate(moves)}
 
 
 @bottle.post('/move')
