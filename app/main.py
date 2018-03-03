@@ -47,16 +47,16 @@ def get_base_moves(game):
     moves = []
     neighbours = [{
         'd': head.up(),
-        'm': Move(UP, 0.01, 'unsafe')
+        'm': Move(UP, 0.01)
     }, {
         'd': head.down(),
-        'm': Move(DOWN, 0.01, 'unsafe')
+        'm': Move(DOWN, 0.01)
     }, {
         'd': head.left(),
-        'm': Move(LEFT, 0.01, 'unsafe')
+        'm': Move(LEFT, 0.01)
     }, {
         'd': head.right(),
-        'm': Move(RIGHT, 0.01, 'unsafe')
+        'm': Move(RIGHT, 0.01)
     }]
     for n in neighbours:
         if game.is_against_wall(n['d']):
