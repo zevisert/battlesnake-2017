@@ -60,6 +60,10 @@ class Game:
         for c in self.snake_coords:
             matrix[c.y + 1][c.x + 1] = 1
 
+        # Mark our butt if we are not going to grow
+        if not self.me.will_grow():
+            matrix[self.me.head().y][self.me.head().x] = 0
+
         # self.print_matrix(matrix)
 
         return matrix
