@@ -128,7 +128,7 @@ def get_largest_area(game):
     }]
 
     max_area = -1
-    max_move = neighbours[0]
+    max_move = neighbours[0]['m']
     for n in neighbours:
         if game.is_unsafe(n['d']):
             continue
@@ -178,6 +178,8 @@ def move():
     attack_moves = attack(game)
     chase_moves = chase(game)
     good = utils.flatten([chase_moves, food_moves, attack_moves, directions])
+
+    game.me.path_to(game, game.me.butt())
 
     # print('\n--- good')
     # for c in good:

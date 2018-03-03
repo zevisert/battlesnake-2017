@@ -2,6 +2,10 @@ import utils
 from coord import Coord
 from snake import Snake
 
+EMPTY = 0
+WALL = 1
+HEAD = 1
+
 
 class Game:
     """Represents the state of the game at one turn."""
@@ -38,6 +42,9 @@ class Game:
         """Return if a coordinate is not safe."""
         return not self.is_safe(coord)
 
+    def coord_type(self, c):
+        return self.board[c.y + 1][c.x + 1]
+
     def print_matrix(self, matrix):
         """Print a matrix."""
         for i in range(len(matrix)):
@@ -45,24 +52,27 @@ class Game:
 
     def create_board_matrix(self):
         """Create a matrix representation of the board."""
-        matrix = [[0 for x in range(self.width + 2)]
+        matrix = [[EMPTY for x in range(self.width + 2)]
                   for y in range(self.height + 2)]
 
         # Add walls on edges
         for i in range(len(matrix[0])):
             matrix[0][i] = 1
-            matrix[len(matrix) - 1][i] = 1
+            matrix[len(matrix) - 1][i] = WALL
         for i in range(len(matrix)):
             matrix[i][0] = 1
-            matrix[i][len(matrix[i]) - 1] = 1
+            matrix[i][len(matrix[i]) - 1] = WALL
 
         # Add walls for other snakes and our tail
-        for c in self.snake_coords:
-            matrix[c.y + 1][c.x + 1] = 1
+        for idx, c in enumerate(self.snake_coords):
+            if idx == 0:
+                matrix[c.y + 1][c.x + 1] = HEAD
+            else:
+                matrix[c.y + 1][c.x + 1] = WALL
 
         # Mark our butt if we are not going to grow
         if not self.me.will_grow():
-            matrix[self.me.head().y][self.me.head().x] = 0
+            matrix[self.me.butt().y + 1][self.me.butt().x + 1] = EMPTY
 
         # self.print_matrix(matrix)
 

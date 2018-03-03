@@ -66,7 +66,7 @@ class Coord:
 
     def distance(self, other):
         """Return manhattan distance to another coordinate."""
-        return abs(self.x - other.x) + abs(self.y - other.y)
+        return float(abs(self.x - other.x) + abs(self.y - other.y))
 
     def sub(self, other):
         """Subtract one coordinate from self."""

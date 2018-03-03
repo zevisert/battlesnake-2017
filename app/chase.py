@@ -19,7 +19,7 @@ def chase(game):
     if val <= 0:
         return []
 
-    for m in game.me.moves_to(game.me.butt()):
+    for m in game.me.path_to(game, game.me.butt()):
         moves.append(Move(m, val, 'chase'))
 
     return moves
