@@ -59,6 +59,15 @@ def flood_fill(game, coord):
 
     board = markup(game.board)
 
+    # Before the fill, move the opponent snake heads out one in each way
+    for snake in game.other_snakes:
+        board[snake.head().y + 1][snake.head().x + 1].cell_type = 'body'
+        board[snake.head().y + 0][snake.head().x + 1].cell_type = 'head'
+        board[snake.head().y + 2][snake.head().x + 1].cell_type = 'head'
+        board[snake.head().y + 1][snake.head().x + 0].cell_type = 'head'
+        board[snake.head().y + 1][snake.head().x + 2].cell_type = 'head'
+        
+
     for row in board:
         print(row)
 
@@ -70,7 +79,7 @@ def flood_fill(game, coord):
     # 4. Add node to Q.
     start = board[coord.y + 1][coord.x + 1]
     start.visited = True
-    start.type = 2 # Our head goes there
+    start.type = 3 # Our head goes there
     Q.put(start)
 
     # 5. For each element N of Q:
